@@ -6,7 +6,6 @@ logging:
     org.springframework.web: INFO
     ru.unit_techno.qr_entry_control_imp: INFO
 
-
 spring:
   application:
     name: qr-entry-control
@@ -25,15 +24,21 @@ spring:
     url: jdbc:postgresql://localhost:5432/unit_techno?currentSchema=qr_entry_control
     username: qr_entry_admin
     password: squd
-
-#  spring.mail.host=smtp.gmail.com
-#  spring.mail.port=587
-#  spring.mail.username=<login user to smtp server>
-#  spring.mail.password=<login password to smtp server>
-#  spring.mail.properties.mail.smtp.auth=true
-#  spring.mail.properties.mail.smtp.starttls.enable=true
-#  mail:
-#    host:
-#    port:
-#    username:
-#    password:
+  thymeleaf:
+    encoding: UTF-8
+  mail:
+    host: smtp.yandex.ru
+    port: 465
+    username: crime-it-tech-user@yandex.ru
+    password: jrRJnutB0t
+    properties:
+      mail:
+        debug: true
+        transport:
+          protocol: smtp
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            enable: true

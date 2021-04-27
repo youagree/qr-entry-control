@@ -13,4 +13,8 @@ public interface QrMapper {
     @Mapping(target = "qrId", ignore = true)
     QrCodeEntity toDomain(QrCodeDto qrCodeDto);
     QrCodeDto toDto(QrCodeEntity qrCodeEntity);
+
+    default Boolean setExpire(Boolean expire){
+        return false;
+    }
 }

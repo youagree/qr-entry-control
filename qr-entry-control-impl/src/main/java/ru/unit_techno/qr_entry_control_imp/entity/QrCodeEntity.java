@@ -50,6 +50,7 @@ public class QrCodeEntity {
 
     @Basic
     @Column(name = "creation_date")
+    //TODO create date time after save
     public Timestamp getCreationDate() {
         return creationDate;
     }
