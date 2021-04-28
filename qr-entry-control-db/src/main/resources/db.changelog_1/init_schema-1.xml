@@ -31,6 +31,7 @@
             <column name="government_number" type="VARCHAR"/>
             <column name="name" type="VARCHAR"/>
             <column name="surname" type="VARCHAR"/>
+            <column name="email" type="VARCHAR"/>
             <column name="expire" type="BOOLEAN"/>
         </createTable>
     </changeSet>

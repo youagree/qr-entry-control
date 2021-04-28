@@ -6,7 +6,6 @@ import lombok.Data;
 @Data
 public class QrCodeDto {
     private Long qrId;
-    //base 64
     private String email;
     private String governmentNumber;
     private String name;

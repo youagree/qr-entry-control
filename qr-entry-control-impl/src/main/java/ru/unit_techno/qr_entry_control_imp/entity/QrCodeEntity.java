@@ -25,6 +25,7 @@ public class QrCodeEntity {
     private String governmentNumber;
     private String name;
     private String surname;
+    private String email;
     private Boolean expire;
 
     @Id
@@ -97,6 +98,16 @@ public class QrCodeEntity {
 
     public void setExpire(Boolean expire) {
         this.expire = expire;
+    }
+
+    @Basic
+    @Column(name = "email")
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     @Override
