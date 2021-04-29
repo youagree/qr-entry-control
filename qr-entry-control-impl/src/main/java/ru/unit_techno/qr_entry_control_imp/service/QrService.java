@@ -10,9 +10,7 @@ import ru.unit_techno.qr_entry_control_imp.entity.QrCodeEntity;
 import ru.unit_techno.qr_entry_control_imp.mapper.QrMapper;
 import ru.unit_techno.qr_entry_control_imp.repository.QrRepository;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -25,13 +23,12 @@ public class QrService {
 
     @SneakyThrows
     public long createAndSendQrToEmail(QrCodeDto qrCodeDto) {
-        QrPictureObject qrPictureObject = qrGeneratorService.generateQrPictureObject(qrMapper.toTempQrObject(qrCodeDto));
+        QrCodeEntity save = qrRepository.save(qrMapper.toDomain(qrCodeDto));
+        QrPictureObject qrPictureObject = qrGeneratorService.generateQrPictureObject(qrMapper.toTempQrObject(qrCodeDto)
+        .setId(save.getQrId()));
 
-        //собираем обьект для сейва, в случае если не удалось отправить, чтобы была возможность повторной отправки
-        QrCodeEntity qrCodeEntity = qrMapper.toDomain(qrCodeDto);
-        qrCodeEntity.setQrPicture(qrPictureObject.getQrImageInBase64());
-
-        QrCodeEntity save = qrRepository.save(qrCodeEntity);
+        save.setQrPicture(qrPictureObject.getQrImageInBase64());
+        qrRepository.save(save);
 
         HashMap<String, Object> map = new HashMap<String, Object>() {{
             put("surname", save.getSurname() + " " + save.getName());
