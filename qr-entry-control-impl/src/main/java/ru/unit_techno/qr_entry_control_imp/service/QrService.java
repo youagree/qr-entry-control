@@ -10,6 +10,8 @@ import ru.unit_techno.qr_entry_control_imp.entity.QrCodeEntity;
 import ru.unit_techno.qr_entry_control_imp.mapper.QrMapper;
 import ru.unit_techno.qr_entry_control_imp.repository.QrRepository;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -31,13 +33,16 @@ public class QrService {
 
         QrCodeEntity save = qrRepository.save(qrCodeEntity);
 
+        HashMap<String, Object> map = new HashMap<String, Object>() {{
+            put("surname", save.getSurname() + " " + save.getName());
+            //TODO дооработать, передавать дату вьезда
+            put("date", "27.04.2021");
+            put("senderName", "Технический пользователь, ");
+        }};
+
         qrEmailService.sendMessageUsingThymeleafTemplate(
                 qrCodeDto.getEmail(), "Проезд на территорию предприятия",
-                Map.of("surname", save.getSurname() + " " + save.getName(),
-                        //TODO дооработать, передавать дату вьезда
-                        "date", "27.04.2021",
-                        "senderName", "Технический пользователь, "
-                ),
+                map,
                 qrPictureObject.getFilePath()
         );
         return save.getQrId();

@@ -15,7 +15,7 @@
     <description>module for work with qr code</description>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>8</java.version>
         <spring-boot.version>2.4.2</spring-boot.version>
         <org.projectlombok.version>1.18.10</org.projectlombok.version>
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
@@ -77,7 +77,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-                    <release>11</release>
+                    <release>8</release>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.mapstruct</groupId>
