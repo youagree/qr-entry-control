@@ -42,3 +42,6 @@ spring:
             enable: true
           ssl:
             enable: true
+
+qr-entry-control:
+  comport-name: "COM4"

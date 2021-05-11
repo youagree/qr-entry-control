@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import ru.unit_techno.qr_entry_control_imp.config.SerialPortTemplate;
+import ru.unit_techno.qr_entry_control_imp.service.QrValidationService;
 
 import static java.lang.Thread.sleep;
 
@@ -14,12 +15,16 @@ import static java.lang.Thread.sleep;
 public class SerialPortListener implements SerialPortEventListener {
 
     SerialPortTemplate serialPort;
+    private QrValidationService qrValidationService;
+    private SerialPortListener listener;
     static StringBuilder sb = new StringBuilder();
 
     @SneakyThrows
     @Autowired
-    public SerialPortListener(@Lazy SerialPortTemplate serialPort) {
+    public SerialPortListener(@Lazy SerialPortTemplate serialPort, QrValidationService qrValidationService, @Lazy SerialPortListener listener) {
         this.serialPort = serialPort;
+        this.qrValidationService = qrValidationService;
+        this.listener = listener;
     }
 
     @SneakyThrows
@@ -29,6 +34,7 @@ public class SerialPortListener implements SerialPortEventListener {
          * произошло и значение. Так например если пришли данные то метод
          * event.getEventValue() вернёт нам количество байт во входном буфере.
          */
+        //todo решить проблему с убийством треда лиссенера при любой Runtime ошибке
         if (event.isRXCHAR()) {
             if (event.getEventValue() > 0) {
                 sleep(500);
@@ -38,9 +44,7 @@ public class SerialPortListener implements SerialPortEventListener {
                     sleep(200);
                     buffer = serialPort.getSerialPort().readBytes();
                     if (buffer == null) {
-                        System.out.println(sb);
-                    } else {
-                        System.out.println(sb);
+                        qrValidationService.parseQrCodeMessage(sb.toString());
                     }
                 }
             }
