@@ -3,6 +3,7 @@ package ru.unit_techno.qr_entry_control_imp.service.listener;
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -12,19 +13,18 @@ import ru.unit_techno.qr_entry_control_imp.service.QrValidationService;
 import static java.lang.Thread.sleep;
 
 @Component
+@Slf4j
 public class SerialPortListener implements SerialPortEventListener {
 
     SerialPortTemplate serialPort;
     private QrValidationService qrValidationService;
-    private SerialPortListener listener;
     static StringBuilder sb = new StringBuilder();
 
     @SneakyThrows
     @Autowired
-    public SerialPortListener(@Lazy SerialPortTemplate serialPort, QrValidationService qrValidationService, @Lazy SerialPortListener listener) {
+    public SerialPortListener(@Lazy SerialPortTemplate serialPort, QrValidationService qrValidationService) {
         this.serialPort = serialPort;
         this.qrValidationService = qrValidationService;
-        this.listener = listener;
     }
 
     @SneakyThrows
@@ -35,19 +35,23 @@ public class SerialPortListener implements SerialPortEventListener {
          * event.getEventValue() вернёт нам количество байт во входном буфере.
          */
         //todo решить проблему с убийством треда лиссенера при любой Runtime ошибке
-        if (event.isRXCHAR()) {
-            if (event.getEventValue() > 0) {
-                sleep(500);
-                byte[] buffer = serialPort.getSerialPort().readBytes();
-                if (buffer != null) {
-                    sb.append(new String(buffer, "UTF-8"));
-                    sleep(200);
-                    buffer = serialPort.getSerialPort().readBytes();
-                    if (buffer == null) {
-                        qrValidationService.parseQrCodeMessage(sb.toString());
+        try {
+            if (event.isRXCHAR()) {
+                if (event.getEventValue() > 0) {
+                    sleep(500);
+                    byte[] buffer = serialPort.getSerialPort().readBytes();
+                    if (buffer != null) {
+                        sb.append(new String(buffer, "UTF-8"));
+                        sleep(200);
+                        buffer = serialPort.getSerialPort().readBytes();
+                        if (buffer == null) {
+                            qrValidationService.parseQrCodeMessage(sb.toString());
+                        }
                     }
                 }
             }
+        } catch (Exception e) {
+            log.info("An error occurred while reading the QR code, message: {}", e.getMessage());
         }
     }
 }
