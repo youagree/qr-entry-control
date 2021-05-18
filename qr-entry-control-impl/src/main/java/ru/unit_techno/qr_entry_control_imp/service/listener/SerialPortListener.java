@@ -1,5 +1,6 @@
 package ru.unit_techno.qr_entry_control_imp.service.listener;
 
+import jssc.SerialPort;
 import jssc.SerialPortEvent;
 import jssc.SerialPortEventListener;
 import lombok.SneakyThrows;
@@ -16,13 +17,13 @@ import static java.lang.Thread.sleep;
 @Slf4j
 public class SerialPortListener implements SerialPortEventListener {
 
-    SerialPortTemplate serialPort;
+    private SerialPortTemplate serialPort;
     private QrValidationService qrValidationService;
     static StringBuilder sb = new StringBuilder();
 
     @SneakyThrows
     @Autowired
-    public SerialPortListener(@Lazy SerialPortTemplate serialPort, QrValidationService qrValidationService) {
+    public SerialPortListener(SerialPortTemplate serialPort, QrValidationService qrValidationService) {
         this.serialPort = serialPort;
         this.qrValidationService = qrValidationService;
     }
@@ -34,7 +35,6 @@ public class SerialPortListener implements SerialPortEventListener {
          * произошло и значение. Так например если пришли данные то метод
          * event.getEventValue() вернёт нам количество байт во входном буфере.
          */
-        //todo решить проблему с убийством треда лиссенера при любой Runtime ошибке
         try {
             if (event.isRXCHAR()) {
                 if (event.getEventValue() > 0) {

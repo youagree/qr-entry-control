@@ -11,16 +11,16 @@ import ru.unit_techno.qr_entry_control_imp.config.SerialPortTemplate;
 @Slf4j
 public class SerialEventListenerAspectEnabler {
 
-    private SerialPortTemplate serialPortTemplate;
+    private SerialPortListenerFacade facade;
 
     @Autowired
-    public SerialEventListenerAspectEnabler(SerialPortTemplate serialPortTemplate) {
-        this.serialPortTemplate = serialPortTemplate;
+    public SerialEventListenerAspectEnabler(SerialPortListenerFacade facade) {
+        this.facade = facade;
     }
 
     @AfterThrowing(value = "execution(public * ru.unit_techno.qr_entry_control_imp.service.*.*(..)) && @annotation(EventListenerCanCrash)", throwing = "e")
     private void activateSerialPortListener(JoinPoint joinPoint, Throwable e) {
         log.info("SerialPort exception occurred: {} \r\n Add new listener on port", e.getMessage());
-        serialPortTemplate.enableEventListener();
+        facade.enableEventListener();
     }
 }

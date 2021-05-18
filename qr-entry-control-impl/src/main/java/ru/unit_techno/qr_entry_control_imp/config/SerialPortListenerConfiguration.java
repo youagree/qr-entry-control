@@ -4,20 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.unit_techno.qr_entry_control_imp.service.listener.SerialEventListenerAspectEnabler;
+import ru.unit_techno.qr_entry_control_imp.service.listener.SerialPortListenerFacade;
 
 @Configuration
 public class SerialPortListenerConfiguration {
 
-    private SerialPortTemplate serialPorTemplate;
+    private SerialPortListenerFacade facade;
 
     @Autowired
-    public SerialPortListenerConfiguration (SerialPortTemplate template) {
-        this.serialPorTemplate = template;
+    public SerialPortListenerConfiguration (SerialPortListenerFacade facade) {
+        this.facade = facade;
     }
 
 
     @Bean
     public SerialEventListenerAspectEnabler createEventListener () {
-        return new SerialEventListenerAspectEnabler(serialPorTemplate);
+        return new SerialEventListenerAspectEnabler(facade);
     }
 }

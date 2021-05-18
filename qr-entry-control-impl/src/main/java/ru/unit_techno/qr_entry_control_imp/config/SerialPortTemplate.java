@@ -18,28 +18,11 @@ public class SerialPortTemplate {
     @Value("${qr-entry-control.comport-name}")
     private String comName;
     private SerialPort serialPort;
-    private SerialPortListener serialPortListener;
-    public static boolean isListened = false;
-
-    @Autowired
-    public SerialPortTemplate(SerialPortListener serialPortListener) {
-        this.serialPortListener = serialPortListener;
-    }
 
     @SneakyThrows
-    @PostConstruct
     public void init() {
         serialPort = new SerialPort(comName);
         serialPort.openPort();
         serialPort.setParams(115200, 8, 1, SerialPort.PARITY_NONE);
-        serialPort.addEventListener(serialPortListener);
-        isListened = true;
-    }
-
-    @SneakyThrows
-    public void enableEventListener() {
-        serialPort.addEventListener(serialPortListener);
-        isListened = true;
-        log.info("Listener has restored");
     }
 }
