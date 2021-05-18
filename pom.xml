@@ -15,13 +15,14 @@
     <description>module for work with qr code</description>
 
     <properties>
-        <java.version>8</java.version>
         <spring-boot.version>2.4.2</spring-boot.version>
         <org.projectlombok.version>1.18.10</org.projectlombok.version>
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
         <springfox-swagger2>2.9.2</springfox-swagger2>
         <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
         <qr-generator.version>3.4.1</qr-generator.version>
+        <jssc.version>2.9.2</jssc.version>
+        <commons-io>2.6</commons-io>
 
         <build.number>1</build.number>
     </properties>
@@ -67,6 +68,17 @@
                 <artifactId>javase</artifactId>
                 <version>${qr-generator.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>io.github.java-native</groupId>
+                <artifactId>jssc</artifactId>
+                <version>${jssc.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commons-io}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -77,7 +89,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-                    <release>8</release>
+                    <release>11</release>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.mapstruct</groupId>
