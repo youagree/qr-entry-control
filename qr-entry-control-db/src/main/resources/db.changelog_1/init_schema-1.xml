@@ -1,0 +1,38 @@
+<?xml version="1.1" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Tables -->
+    <changeSet id="2021.04.20-create-sequence-qr_code" author="xtraenough">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="qr_code_id_seq"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="qr_code_id_seq" incrementBy="50"/>
+    </changeSet>
+
+
+    <changeSet id="2021.04.20-create-table-qr_code" author="xtraenough">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="qr_code"/>
+            </not>
+        </preConditions>
+
+        <!-- table qr_code -->
+        <createTable tableName="qr_code">
+            <column name="qr_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="qr_picture" type="VARCHAR"/>
+            <column name="creation_date" type="TIMESTAMP"/>
+            <column name="government_number" type="VARCHAR"/>
+            <column name="name" type="VARCHAR"/>
+            <column name="surname" type="VARCHAR"/>
+            <column name="email" type="VARCHAR"/>
+            <column name="expire" type="BOOLEAN"/>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
