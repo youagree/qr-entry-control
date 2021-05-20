@@ -10,6 +10,8 @@ import ru.unit_techno.qr_entry_control_imp.entity.QrCodeEntity;
 import ru.unit_techno.qr_entry_control_imp.mapper.QrMapper;
 import ru.unit_techno.qr_entry_control_imp.repository.QrRepository;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.HashMap;
 
 @Service
@@ -28,6 +30,7 @@ public class QrService {
         .setId(save.getQrId()));
 
         save.setQrPicture(qrPictureObject.getQrImageInBase64());
+        save.setCreationDate(new Timestamp(System.currentTimeMillis()));
         qrRepository.save(save);
 
         HashMap<String, Object> map = new HashMap<String, Object>() {{
