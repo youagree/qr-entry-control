@@ -33,6 +33,7 @@
             <column name="surname" type="VARCHAR"/>
             <column name="email" type="VARCHAR"/>
             <column name="expire" type="BOOLEAN"/>
+            <column name="delivery_status" type="VARCHAR"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>
