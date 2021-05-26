@@ -48,4 +48,5 @@ qr-entry-control:
   cron:
     #real cron "0 0 0 * * *"  real timezone "Europe/Moscow"
     delete-expired-qr-job: "*/30 * * * * *"
+    expiring-old-qr-job: "*/45 * * * * *"
     time-zone: "Europe/Moscow"

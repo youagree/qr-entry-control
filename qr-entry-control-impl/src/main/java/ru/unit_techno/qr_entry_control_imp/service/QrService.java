@@ -31,6 +31,7 @@ public class QrService {
 
         save.setQrPicture(qrPictureObject.getQrImageInBase64());
         save.setCreationDate(new Timestamp(System.currentTimeMillis()));
+        save.setExpire(false);
         qrRepository.save(save);
 
         HashMap<String, Object> map = new HashMap<String, Object>() {{
