@@ -2,7 +2,6 @@
 package ru.unit_techno.qr_entry_control_imp.entity;
 
 import lombok.Data;
-import ru.unit_techno.qr_entry_control_imp.entity.enums.DeliveryStatus;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -38,10 +37,9 @@ public class QrCodeEntity {
     @Column(name = "expire")
     private Boolean expire;
     @Basic
-    @Column(name = "delivery_status")
-    @Enumerated(EnumType.STRING)
-    private DeliveryStatus deliveryStatus;
-    @Basic
     @Column(name = "entering_date")
     private Timestamp enteringDate;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "qr_delivery_id", referencedColumnName = "id")
+    private QrDeliveryEntity qrDeliveryEntity;
 }

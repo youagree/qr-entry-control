@@ -17,7 +17,7 @@ public class QrController {
     private final QrService qrService;
 
     @PostMapping("/createAndSend")
-    public long createQrAndSend(@RequestBody QrCodeDto qrCodeDto){
+    public Long createQrAndSend(@RequestBody QrCodeDto qrCodeDto){
        return qrService.createAndSendQrToEmail(qrCodeDto);
     }
 }

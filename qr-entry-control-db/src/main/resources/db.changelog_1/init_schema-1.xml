@@ -34,7 +34,49 @@
             <column name="surname" type="VARCHAR"/>
             <column name="email" type="VARCHAR"/>
             <column name="expire" type="BOOLEAN"/>
+            <column name="qr_delivery_id" type="BIGINT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2021.04.20-create-sequence-qr_delivery" author="xtraenough">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <sequenceExists sequenceName="qr_delivery_process_seq"/>
+            </not>
+        </preConditions>
+        <createSequence sequenceName="qr_delivery_process_seq" incrementBy="50"/>
+    </changeSet>
+
+    <changeSet id="2021.05.27-create-table-qr_code" author="xtraenough">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="qr_delivery_process"/>
+            </not>
+        </preConditions>
+
+        <!-- table qr_code -->
+        <createTable tableName="qr_delivery_process">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="message_tag" type="UUID"/>
             <column name="delivery_status" type="VARCHAR"/>
         </createTable>
     </changeSet>
+
+    <changeSet id="add_foreign_key_in_qr_delivery_process"
+               author="Aleksey_Vasin">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <foreignKeyConstraintExists foreignKeyName="qr_delivery_process_fk"
+                                            foreignKeyTableName="qr_delivery_process"/>
+            </not>
+        </preConditions>
+        <addForeignKeyConstraint baseColumnNames="qr_delivery_id"
+                                 baseTableName="qr_code"
+                                 constraintName="qr_delivery_constraint_fk"
+                                 referencedColumnNames="id"
+                                 referencedTableName="qr_delivery_process"/>
+    </changeSet>
+
 </databaseChangeLog>

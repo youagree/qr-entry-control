@@ -11,6 +11,9 @@ public interface QrRepository extends JpaRepository<QrCodeEntity, Long> {
     void deleteAllByExpireTrue();
 
     @Modifying
-    @Query(value = "update qr_code set expire = true where (entering_date - now()) < (- interval '1 hour')", nativeQuery = true)
+    @Query(value = "update qr_code set expire = true where (entering_date - now()) < (- interval '1 hour')",
+           nativeQuery = true)
     void expireOldQrCodes();
+
+    QrCodeEntity findByQrPicture(String qrPicture);
 }

@@ -1,14 +1,14 @@
 
 package ru.unit_techno.qr_entry_control_imp.service;
 
+import ru.unit_techno.qr_entry_control_imp.dto.service.QrPictureObject;
+
 import javax.mail.MessagingException;
 import java.io.IOException;
-import java.util.Map;
 
 public interface EmailService {
-    void sendMessageUsingThymeleafTemplate(String to,
-                                           String subject,
-                                           Map<String, Object> templateModel,
-                                           String pathToQr)
+    boolean sendMessageUsingThymeleafTemplate(String to,
+                                              String subject,
+                                              QrPictureObject qrPictureObject)
             throws IOException, MessagingException;
 }

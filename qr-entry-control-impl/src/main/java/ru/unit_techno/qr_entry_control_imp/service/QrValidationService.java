@@ -36,6 +36,7 @@ public class QrValidationService {
         QrObjectTemplateDto qrCodeEntity = mapper.readValue(qrMessage, QrObjectTemplateDto.class);
         Optional<QrCodeEntity> qrObj = repository.findById(qrCodeEntity.getId());
 
+        //TODO проверять дату въезда, если вдруг человек заказал на завтра,приехал сегодня
         if (qrObj.isPresent()) {
             QrCodeEntity qrCodeEnt = qrObj.get();
             if (qrCodeEnt.getExpire()) {
