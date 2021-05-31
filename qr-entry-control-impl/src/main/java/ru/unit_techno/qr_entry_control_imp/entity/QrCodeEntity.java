@@ -4,16 +4,7 @@ package ru.unit_techno.qr_entry_control_imp.entity;
 import lombok.Data;
 import ru.unit_techno.qr_entry_control_imp.entity.enums.DeliveryStatus;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Data
@@ -50,4 +41,7 @@ public class QrCodeEntity {
     @Column(name = "delivery_status")
     @Enumerated(EnumType.STRING)
     private DeliveryStatus deliveryStatus;
+    @Basic
+    @Column(name = "entering_date")
+    private Timestamp enteringDate;
 }

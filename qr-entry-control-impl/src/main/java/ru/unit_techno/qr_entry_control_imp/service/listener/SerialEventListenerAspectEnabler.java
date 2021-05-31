@@ -5,7 +5,6 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.unit_techno.qr_entry_control_imp.config.SerialPortTemplate;
 
 @Aspect
 @Slf4j

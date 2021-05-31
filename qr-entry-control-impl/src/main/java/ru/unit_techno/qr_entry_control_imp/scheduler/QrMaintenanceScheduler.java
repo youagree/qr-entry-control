@@ -9,12 +9,12 @@ import ru.unit_techno.qr_entry_control_imp.repository.QrRepository;
 
 @Component
 @Slf4j
-public class ExpireQrDeleteScheduler {
+public class QrMaintenanceScheduler {
 
     private QrRepository qrRepository;
 
     @Autowired
-    public ExpireQrDeleteScheduler(QrRepository qrRepository) {
+    public QrMaintenanceScheduler(QrRepository qrRepository) {
         this.qrRepository = qrRepository;
     }
 
@@ -24,5 +24,13 @@ public class ExpireQrDeleteScheduler {
         log.info("Start deleting expired QR codes");
         qrRepository.deleteAllByExpireTrue();
         log.info("Deleting successful");
+    }
+
+    @Scheduled(cron = "${qr-entry-control.cron.expiring-old-qr-job}", zone = "${qr-entry-control.cron.time-zone}")
+    @Transactional
+    public void expireOldQrCodes() {
+        log.info("Start expiring old QR codes");
+        qrRepository.expireOldQrCodes();
+        log.info("QR has expired");
     }
 }

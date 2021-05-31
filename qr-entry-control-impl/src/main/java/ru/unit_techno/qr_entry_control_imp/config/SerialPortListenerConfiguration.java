@@ -16,7 +16,6 @@ public class SerialPortListenerConfiguration {
         this.facade = facade;
     }
 
-
     @Bean
     public SerialEventListenerAspectEnabler createEventListener () {
         return new SerialEventListenerAspectEnabler(facade);
