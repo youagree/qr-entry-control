@@ -1,0 +1,12 @@
+spring:
+  logging:
+    level:
+      ROOT: DEBUG
+
+  liquibase:
+    enabled: true
+    parameters:
+      schema: qr_entry_control
+      text_array_type: ARRAY
+    change-log: classpath:database_changelog.xml
+    drop-first: true
