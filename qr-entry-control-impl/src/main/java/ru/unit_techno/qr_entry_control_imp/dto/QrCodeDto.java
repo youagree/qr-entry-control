@@ -18,7 +18,5 @@ public class QrCodeDto {
     @JsonSerialize(using = TimestampDateSerializer.class)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
     private Timestamp enteringDate;
-
     //TODO добавить планируемую дату вьезда
-
 }
