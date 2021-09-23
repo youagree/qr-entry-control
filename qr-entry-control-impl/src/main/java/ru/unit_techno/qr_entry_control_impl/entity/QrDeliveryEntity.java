@@ -14,7 +14,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import java.util.UUID;
 
 @Data
 @Entity
@@ -25,10 +24,6 @@ public class QrDeliveryEntity {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "qr_delivery_process_seq")
     private Long id;
-
-    @Basic
-    @Column(name = "message_tag")
-    private UUID messageTag;
 
     @Basic
     @Column(name = "delivery_status")

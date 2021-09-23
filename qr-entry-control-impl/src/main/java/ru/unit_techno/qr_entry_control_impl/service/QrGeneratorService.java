@@ -16,7 +16,6 @@ import ru.unit_techno.qr_entry_control_impl.dto.service.QrPictureObject;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.Base64;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -40,7 +39,6 @@ public class QrGeneratorService {
         String encodedFile = Base64.getEncoder().encodeToString(fileContent);
 
         QrPictureObject qrPictureObject = new QrPictureObject();
-        qrPictureObject.setMessageTag(UUID.randomUUID());
         qrPictureObject.setFilePath(Paths.get(path).getFileName().toString());
         qrPictureObject.setQrImageInBase64(encodedFile);
 

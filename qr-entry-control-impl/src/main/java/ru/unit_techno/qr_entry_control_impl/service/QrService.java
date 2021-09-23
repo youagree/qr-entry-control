@@ -55,11 +55,12 @@ public class QrService {
         qrCodeForSave.setQrPicture(qrPictureObject.getQrImageInBase64());
         qrCodeForSave.setCreationDate(new Timestamp(System.currentTimeMillis()));
         qrCodeForSave.setQrDeliveryEntity(new QrDeliveryEntity()
-                .setMessageTag(qrPictureObject.getMessageTag())
                 .setDeliveryStatus(DeliveryStatus.NOT_DELIVERED)
         );
+        QrCodeEntity save = qrRepository.save(qrCodeForSave);
 
-        qrRepository.save(qrCodeForSave);
+        Long deliveryId = save.getQrDeliveryEntity().getId();
+        qrPictureObject.setDeliveryEntityId(deliveryId);
 
         HashMap<String, Object> map = new HashMap<>() {{
             put("surname", qrCodeForSave.getSurname() + " " + qrCodeForSave.getName());
