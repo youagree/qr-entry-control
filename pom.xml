@@ -23,6 +23,7 @@
         <qr-generator.version>3.4.1</qr-generator.version>
         <jssc.version>2.9.2</jssc.version>
         <commons-io>2.6</commons-io>
+        <spring-cloud.version>2020.0.3</spring-cloud.version>
 
         <build.number>1</build.number>
     </properties>
@@ -79,6 +80,39 @@
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-parent</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.unit.techno.device.registration.service</groupId>
+                <artifactId>device-registration-api</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.unit.techno.ariss.barrier</groupId>
+                <artifactId>ariss-barrier-api</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>ru.unit.techno</groupId>
+                <artifactId>ariss-log-action-db</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
+
+            <!-- self dependency -->
+            <dependency>
+                <groupId>ru.unit_techno.qr_entry_control</groupId>
+                <artifactId>qr-entry-control-db</artifactId>
+                <version>1.0-SNAPSHOT</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -112,6 +146,7 @@
                         <arg>-Amapstruct.unmappedTargetPolicy=WARN</arg>
                         <arg>-Amapstruct.suppressGeneratorTimestamp=true</arg>
                     </compilerArgs>
+                    <parameters>true</parameters>
                 </configuration>
             </plugin>
             <plugin>

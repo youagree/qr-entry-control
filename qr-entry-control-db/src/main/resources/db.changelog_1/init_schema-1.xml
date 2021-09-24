@@ -34,6 +34,7 @@
             <column name="surname" type="VARCHAR"/>
             <column name="email" type="VARCHAR"/>
             <column name="expire" type="BOOLEAN"/>
+            <column name="uuid" type="uuid"/>
             <column name="qr_delivery_id" type="BIGINT"/>
         </createTable>
     </changeSet>
