@@ -16,7 +16,6 @@ import ru.unit_techno.qr_entry_control_impl.service.QrEmailService;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
@@ -46,16 +45,16 @@ public class MessageScheduler {
             if (deliveryResult) {
                 log.info("Message sent successful");
                 messageStorageService.deleteSuccessDeliveryMessage(key);
-                successDeliveryStatus.add(new QrDeliveryEntity().setMessageTag(
-                        resendObject.getMessageTag())
+                successDeliveryStatus.add(new QrDeliveryEntity()
+                        .setId(resendObject.getDeliveryEntityId())
                         .setDeliveryStatus(DeliveryStatus.DELIVERED));
             } else {
                 log.info("message not delivery {}", resendObject);
             }
         });
 
-        List<UUID> forUpdateStatuses = successDeliveryStatus.stream()
-                .map(QrDeliveryEntity::getMessageTag)
+        List<Long> forUpdateStatuses = successDeliveryStatus.stream()
+                .map(QrDeliveryEntity::getId)
                 .collect(Collectors.toList());
         qrDeliveryEntityRepository.updateStatuses(forUpdateStatuses, DeliveryStatus.DELIVERED);
         log.info("Message has been resent and complete successful");

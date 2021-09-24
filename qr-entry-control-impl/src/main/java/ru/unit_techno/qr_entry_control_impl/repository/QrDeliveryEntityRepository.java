@@ -10,15 +10,14 @@ import ru.unit_techno.qr_entry_control_impl.entity.QrDeliveryEntity;
 import ru.unit_techno.qr_entry_control_impl.entity.enums.DeliveryStatus;
 
 import java.util.List;
-import java.util.UUID;
 
 public interface QrDeliveryEntityRepository extends JpaRepository<QrDeliveryEntity, Long> {
 
     @Modifying
-    @Query("update QrDeliveryEntity set deliveryStatus = :deliveryStatus where messageTag = :uuid")
-    void updateStatus(@Param("uuid") UUID uuid, @Param("deliveryStatus") DeliveryStatus deliveryStatus);
+    @Query("update QrDeliveryEntity set deliveryStatus = :deliveryStatus where id = :id")
+    void updateStatus(@Param("id") Long id, @Param("deliveryStatus") DeliveryStatus deliveryStatus);
 
     @Modifying
-    @Query("update QrDeliveryEntity set deliveryStatus = :deliveryStatus where messageTag in (:uuid)")
-    void updateStatuses(@Param("uuid") List<UUID> uuid, @Param("deliveryStatus") DeliveryStatus deliveryStatus);
+    @Query("update QrDeliveryEntity set deliveryStatus = :deliveryStatus where id in (:id)")
+    void updateStatuses(@Param("id") List<Long> id, @Param("deliveryStatus") DeliveryStatus deliveryStatus);
 }

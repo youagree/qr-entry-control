@@ -60,7 +60,6 @@
             <column name="id" type="BIGINT">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="message_tag" type="UUID"/>
             <column name="delivery_status" type="VARCHAR"/>
         </createTable>
     </changeSet>

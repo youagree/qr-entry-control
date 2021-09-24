@@ -38,11 +38,11 @@ public class QrEmailService implements EmailService {
             String htmlBody = thymeleafTemplateEngine.process("template-thymeleaf.html", thymeleafContext);
             sendHtmlMessage(to, subject, htmlBody, qrPictureObject.getFilePath());
             //TODO добавить удаление qr кода(картинки)
-            qrDeliveryEntityRepository.updateStatus(qrPictureObject.getMessageTag(), DeliveryStatus.DELIVERED);
+            qrDeliveryEntityRepository.updateStatus(qrPictureObject.getDeliveryEntityId(), DeliveryStatus.DELIVERED);
             return true;
         } catch (Exception e) {
             messageStorageService.putNotDeliveryMessage(to, qrPictureObject);
-            qrDeliveryEntityRepository.updateStatus(qrPictureObject.getMessageTag(), DeliveryStatus.NOT_DELIVERED);
+            qrDeliveryEntityRepository.updateStatus(qrPictureObject.getDeliveryEntityId(), DeliveryStatus.NOT_DELIVERED);
             return false;
         }
     }
