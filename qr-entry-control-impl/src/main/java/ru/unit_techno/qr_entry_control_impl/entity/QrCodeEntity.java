@@ -26,19 +26,19 @@ public class QrCodeEntity {
     @Column(name = "government_number")
     private String governmentNumber;
     @Basic
-    @Column(name = "name")
+    @Column
     private String name;
     @Basic
-    @Column(name = "surname")
+    @Column
     private String surname;
     @Basic
-    @Column(name = "email")
+    @Column
     private String email;
     @Basic
-    @Column(name = "expire")
+    @Column
     private Boolean expire;
     @Basic
-    @Column(name = "uuid")
+    @Column
     private UUID uuid;
     @Basic
     @Column(name = "entering_date")

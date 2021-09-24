@@ -24,6 +24,11 @@
         <jssc.version>2.9.2</jssc.version>
         <commons-io>2.6</commons-io>
         <spring-cloud.version>2020.0.3</spring-cloud.version>
+        <ariss.device-registration.version>1.0-SNAPSHOT</ariss.device-registration.version>
+        <ariss.log-action.version>1.0-SNAPSHOT</ariss.log-action.version>
+        <ariss.barrier.version>1.0-SNAPSHOT</ariss.barrier.version>
+
+
 
         <build.number>1</build.number>
     </properties>
@@ -92,26 +97,26 @@
             <dependency>
                 <groupId>ru.unit.techno.device.registration.service</groupId>
                 <artifactId>device-registration-api</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${ariss.device-registration.version}</version>
             </dependency>
             <dependency>
                 <groupId>ru.unit.techno.ariss.barrier</groupId>
                 <artifactId>ariss-barrier-api</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${ariss.barrier.version}</version>
             </dependency>
 
 
             <dependency>
                 <groupId>ru.unit.techno</groupId>
                 <artifactId>ariss-log-action-db</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${ariss.log-action.version}</version>
             </dependency>
 
             <!-- self dependency -->
             <dependency>
                 <groupId>ru.unit_techno.qr_entry_control</groupId>
                 <artifactId>qr-entry-control-db</artifactId>
-                <version>1.0-SNAPSHOT</version>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -146,7 +151,6 @@
                         <arg>-Amapstruct.unmappedTargetPolicy=WARN</arg>
                         <arg>-Amapstruct.suppressGeneratorTimestamp=true</arg>
                     </compilerArgs>
-                    <parameters>true</parameters>
                 </configuration>
             </plugin>
             <plugin>

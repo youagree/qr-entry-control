@@ -36,6 +36,7 @@ public class QrValidationService {
 
     @SneakyThrows
     public void parseQrCodeMessage(QrObjectTemplateDto qrMessage, Long deviceId) {
+        /// TODO: 24.09.2021 Валидировать объект QrObjectTemplateDto на null поля.
 
         Optional<QrCodeEntity> qrObj = repository.findByUuid(UUID.fromString(qrMessage.getUuid()));
 
@@ -69,13 +70,5 @@ public class QrValidationService {
                             .setMessage("We are no have this QR code in database. Try generate QR code on our website!"));
             throw new Exception("We are no have this QR code in database. Try generate QR code on our website!");
         }
-    }
-
-    public boolean qrCodeValidation(String qrCodeMessage) {
-        return qrCodeMessage.contains("id")
-                && qrCodeMessage.contains("governmentNumber")
-                && qrCodeMessage.contains("name")
-                && qrCodeMessage.contains("surname")
-                && qrCodeMessage.contains("expire");
     }
 }

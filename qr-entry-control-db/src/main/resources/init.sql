@@ -1,5 +1,3 @@
--- create database
-
 CREATE SCHEMA qr_entry_control;
 
 CREATE USER qr_entry_admin WITH password 'squd';

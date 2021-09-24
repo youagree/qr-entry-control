@@ -59,7 +59,6 @@ public class QrService {
                 .setDeliveryStatus(DeliveryStatus.NOT_DELIVERED)
         );
 
-        /// TODO: 23.09.2021 Разобраться с QrTemplate и ID, нужно чтобы ID попадало в QR, но ID появляется
         qrRepository.save(qrCodeForSave);
 
         HashMap<String, Object> map = new HashMap<>() {{
