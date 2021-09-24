@@ -23,6 +23,12 @@
         <qr-generator.version>3.4.1</qr-generator.version>
         <jssc.version>2.9.2</jssc.version>
         <commons-io>2.6</commons-io>
+        <spring-cloud.version>2020.0.3</spring-cloud.version>
+        <ariss.device-registration.version>1.0-SNAPSHOT</ariss.device-registration.version>
+        <ariss.log-action.version>1.0-SNAPSHOT</ariss.log-action.version>
+        <ariss.barrier.version>1.0-SNAPSHOT</ariss.barrier.version>
+
+
 
         <build.number>1</build.number>
     </properties>
@@ -78,6 +84,39 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commons-io}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-parent</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>ru.unit.techno.device.registration.service</groupId>
+                <artifactId>device-registration-api</artifactId>
+                <version>${ariss.device-registration.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ru.unit.techno.ariss.barrier</groupId>
+                <artifactId>ariss-barrier-api</artifactId>
+                <version>${ariss.barrier.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>ru.unit.techno</groupId>
+                <artifactId>ariss-log-action-db</artifactId>
+                <version>${ariss.log-action.version}</version>
+            </dependency>
+
+            <!-- self dependency -->
+            <dependency>
+                <groupId>ru.unit_techno.qr_entry_control</groupId>
+                <artifactId>qr-entry-control-db</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

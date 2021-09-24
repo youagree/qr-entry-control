@@ -98,5 +98,29 @@
             <version>1.16.0</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.unit.techno.device.registration.service</groupId>
+            <artifactId>device-registration-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ru.unit.techno.ariss.barrier</groupId>
+            <artifactId>ariss-barrier-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>ru.unit_techno.qr_entry_control</groupId>
+            <artifactId>qr-entry-control-db</artifactId>
+        </dependency>
     </dependencies>
 </project>

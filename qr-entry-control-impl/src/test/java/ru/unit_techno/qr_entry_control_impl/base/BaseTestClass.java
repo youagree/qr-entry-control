@@ -9,10 +9,14 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
+import ru.unit_techno.qr_entry_control_impl.mapper.EntryDeviceToReqRespMapper;
+import ru.unit_techno.qr_entry_control_impl.repository.QrRepository;
 
 import java.time.Duration;
 
 @Slf4j
+@IntegrationTest
 public class BaseTestClass {
 
     @Autowired
@@ -20,6 +24,14 @@ public class BaseTestClass {
 
     @Autowired
     protected JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    protected EntryDeviceToReqRespMapper reqRespMapper;
+
+    protected ObjectMapper objectMapper = new ObjectMapper();
+
+    @Autowired
+    protected QrRepository qrRepository;
 
     private static final String DB_NAME = "unit_techno";
     public static String DB_URL;
@@ -33,7 +45,7 @@ public class BaseTestClass {
     static {
         postgresDB.setWaitStrategy(Wait.defaultWaitStrategy().withStartupTimeout(Duration.ofSeconds(30)));
         postgresDB.start();
-        DB_URL = String.format("jdbc:p6spy:postgresql://%s:%d/unit_techno?currentSchema=qr_entry_control",
+        DB_URL = String.format("jdbc:postgresql://%s:%d/unit_techno?currentSchema=qr_entry_control",
                 postgresDB.getContainerIpAddress(),
                 postgresDB.getFirstMappedPort());
     }
