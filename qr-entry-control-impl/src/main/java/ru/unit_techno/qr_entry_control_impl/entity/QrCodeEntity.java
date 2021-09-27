@@ -3,8 +3,19 @@ package ru.unit_techno.qr_entry_control_impl.entity;
 
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Data
@@ -42,7 +53,7 @@ public class QrCodeEntity {
     private UUID uuid;
     @Basic
     @Column(name = "entering_date")
-    private Timestamp enteringDate;
+    private LocalDateTime enteringDate;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "qr_delivery_id", referencedColumnName = "id")
     private QrDeliveryEntity qrDeliveryEntity;

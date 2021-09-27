@@ -1,13 +1,10 @@
 
 package ru.unit_techno.qr_entry_control_impl.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.unit.techno.ariss.barrier.api.BarrierFeignClient;
-import ru.unit.techno.device.registration.api.DeviceResource;
 import ru.unit_techno.qr_entry_control_impl.dto.QrCodeDto;
 import ru.unit_techno.qr_entry_control_impl.dto.service.QrObjectTemplateDto;
 import ru.unit_techno.qr_entry_control_impl.dto.service.QrPictureObject;
@@ -15,7 +12,6 @@ import ru.unit_techno.qr_entry_control_impl.entity.QrCodeEntity;
 import ru.unit_techno.qr_entry_control_impl.entity.QrDeliveryEntity;
 import ru.unit_techno.qr_entry_control_impl.entity.enums.DeliveryStatus;
 import ru.unit_techno.qr_entry_control_impl.exception.DeliverySendException;
-import ru.unit_techno.qr_entry_control_impl.mapper.EntryDeviceToReqRespMapper;
 import ru.unit_techno.qr_entry_control_impl.mapper.QrMapper;
 import ru.unit_techno.qr_entry_control_impl.repository.QrRepository;
 
@@ -31,10 +27,6 @@ public class QrService {
     private final QrRepository qrRepository;
     private final QrEmailService qrEmailService;
     private final QrGeneratorService qrGeneratorService;
-    private final ObjectMapper mapper;
-    private final DeviceResource deviceResource;
-    private final BarrierFeignClient barrierFeignClient;
-    private final EntryDeviceToReqRespMapper reqRespMapper;
 
     @SneakyThrows
     @Transactional
