@@ -15,8 +15,8 @@
     <description>module for work with qr code</description>
 
     <properties>
-        <spring-boot.version>2.4.5</spring-boot.version>
-        <org.projectlombok.version>1.18.10</org.projectlombok.version>
+        <spring-boot.version>2.5.5</spring-boot.version>
+        <org.projectlombok.version>1.18.20</org.projectlombok.version>
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
         <springfox-swagger2>2.9.2</springfox-swagger2>
         <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
@@ -141,6 +141,11 @@
                             <version>${org.projectlombok.version}</version>
                         </path>
                         <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>0.2.0</version>
+                        </path>
+                        <path>
                             <groupId>org.springframework.boot</groupId>
                             <artifactId>spring-boot-configuration-processor</artifactId>
                             <version>${spring-boot.version}</version>
@@ -150,6 +155,7 @@
                         <arg>-Amapstruct.defaultComponentModel=spring</arg>
                         <arg>-Amapstruct.unmappedTargetPolicy=WARN</arg>
                         <arg>-Amapstruct.suppressGeneratorTimestamp=true</arg>
+                        <arg>-Amapstruct.verbose=true</arg>
                     </compilerArgs>
                 </configuration>
             </plugin>
