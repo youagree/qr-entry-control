@@ -57,7 +57,4 @@ public class QrCodeEntity {
     @OneToOne
     @JoinColumn(name = "qr_delivery_id", referencedColumnName = "id")
     private QrDeliveryEntity qrDeliveryEntity;
-    @OneToOne
-    @JoinColumn(name="card")
-    private CardEntity card;
 }
