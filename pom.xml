@@ -27,6 +27,7 @@
         <ariss.device-registration.version>1.0-SNAPSHOT</ariss.device-registration.version>
         <ariss.log-action.version>1.0-SNAPSHOT</ariss.log-action.version>
         <ariss.barrier.version>1.0-SNAPSHOT</ariss.barrier.version>
+        <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
 
 
 
@@ -189,6 +190,11 @@
                         </manifestEntries>
                     </archive>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
             </plugin>
         </plugins>
     </build>

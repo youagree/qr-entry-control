@@ -1,9 +1,10 @@
 package ru.unit_techno.qr_entry_control_impl.validation;
 
-import lombok.SneakyThrows;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import ru.unit.techno.ariss.barrier.api.BarrierFeignClient;
@@ -13,16 +14,18 @@ import ru.unit.techno.device.registration.api.DeviceResource;
 import ru.unit.techno.device.registration.api.dto.DeviceResponseDto;
 import ru.unit.techno.device.registration.api.enums.DeviceType;
 import ru.unit_techno.qr_entry_control_impl.base.BaseTestClass;
-import ru.unit_techno.qr_entry_control_impl.dto.service.QrObjectTemplateDto;
+import ru.unit_techno.qr_entry_control_impl.entity.CardEntity;
 import ru.unit_techno.qr_entry_control_impl.entity.QrCodeEntity;
 import ru.unit_techno.qr_entry_control_impl.entity.QrDeliveryEntity;
+import ru.unit_techno.qr_entry_control_impl.entity.enums.CardStatus;
 import ru.unit_techno.qr_entry_control_impl.entity.enums.DeliveryStatus;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
-public class QrValidationTest extends BaseTestClass {
+public class CardReturningValidation extends BaseTestClass {
 
     @MockBean
     private DeviceResource deviceResource;
@@ -30,15 +33,15 @@ public class QrValidationTest extends BaseTestClass {
     @MockBean
     private BarrierFeignClient barrierFeignClient;
 
-    public static final String BASE_URL = "/ui/qr";
+    public static final String BASE_URL = "/ui/card";
 
-    @SneakyThrows
     @Test
-    @DisplayName("Скан QR кода и валидация. Позитивный кейс")
-    public void receiveQrMessageTest() {
+    @DisplayName("Сдача карты, позитивный кейс")
+    public void cardReturningPos() {
         UUID uuid = UUID.randomUUID();
-        Mockito.when(deviceResource.getGroupDevices(7765L, DeviceType.QR))
-                .thenReturn(new DeviceResponseDto().setEntryAddress("unknow").setDeviceId(1239L).setType("ENTRY"));
+
+        OngoingStubbing<DeviceResponseDto> deviceResponseDtoOngoingStubbing = Mockito.when(deviceResource.getGroupDevices(9999L, DeviceType.CARD))
+                .thenReturn(new DeviceResponseDto().setEntryAddress("unknown").setDeviceId(1239L).setType("ENTRY"));
 
         BarrierRequestDto barrierRequestDto = reqRespMapper.entryDeviceToRequest(new DeviceResponseDto()
                 .setEntryAddress("unknown")
@@ -47,34 +50,37 @@ public class QrValidationTest extends BaseTestClass {
 
         Mockito.when(barrierFeignClient.openBarrier(barrierRequestDto))
                 .thenReturn(new BarrierResponseDto()
-                .setBarrierId(1239L)
-                .setBarrierResponseStatus(null));
+                        .setBarrierId(1239L)
+                        .setBarrierResponseStatus(null));
 
-        QrDeliveryEntity saveDel = qrDeliveryEntityRepository.save(new QrDeliveryEntity()
+        QrDeliveryEntity save = qrDeliveryEntityRepository.save(new QrDeliveryEntity()
                 .setId(3L)
                 .setDeliveryStatus(DeliveryStatus.DELIVERED));
 
-        qrRepository.save(new QrCodeEntity()
+        CardEntity cardSave = cardRepository.save(new CardEntity().setId(2L)
+                .setCardValue("тупорылый").setCardStatus(CardStatus.ISSUED));
+
+        QrCodeEntity qrCode = qrRepository.save(new QrCodeEntity()
                 .setExpire(false)
                 .setName("Ignat")
                 .setSurname("Zalupin")
                 .setGovernmentNumber("А777АА 77")
                 .setCreationDate(Timestamp.valueOf(LocalDateTime.now()))
                 .setEmail("azaza@gmail.com")
-                .setEnteringDate(LocalDateTime.of(2021, 9, 24, 16, 0))
+                .setEnteringDate(Timestamp.valueOf(LocalDateTime.of(2021, 9, 24, 16, 0)))
                 .setQrPicture("Picture")
                 .setUuid(uuid)
-                .setQrDeliveryEntity(saveDel));
+                .setQrDeliveryEntity(save)
+                .setCard(cardSave));
 
-        QrObjectTemplateDto qrObjectTemplateDto = new QrObjectTemplateDto()
-                .setUuid(String.valueOf(uuid))
-                .setGovernmentNumber("А777АА 77")
-                .setSurname("Zalupin")
-                .setName("Ignat");
+        String resultUrl = BASE_URL + "/return/" + "тупорылый?deviceId=9999";
 
-        String resultUrl = BASE_URL + "/receiveQrCode/7765";
+        testUtils.invokePostApi(Void.class, resultUrl, HttpStatus.OK, null);
 
-        testUtils.invokePostApi(Void.class, resultUrl, HttpStatus.OK, qrObjectTemplateDto);
-        /// TODO: 24.09.2021 Добавить ассерты на эвенты, и может еще что-то проверить, доделать тест
+        Optional<QrCodeEntity> byId = qrRepository.findById(qrCode.getQrId());
+        Optional<CardEntity> byId1 = cardRepository.findById(cardSave.getId());
+
+        Assertions.assertNull(byId.get().getCard());
+        Assertions.assertEquals(byId1.get().getCardStatus(), CardStatus.RETURNED);
     }
 }
