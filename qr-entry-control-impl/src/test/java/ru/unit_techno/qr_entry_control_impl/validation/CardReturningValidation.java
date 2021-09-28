@@ -67,7 +67,7 @@ public class CardReturningValidation extends BaseTestClass {
                 .setGovernmentNumber("А777АА 77")
                 .setCreationDate(Timestamp.valueOf(LocalDateTime.now()))
                 .setEmail("azaza@gmail.com")
-                .setEnteringDate(Timestamp.valueOf(LocalDateTime.of(2021, 9, 24, 16, 0)))
+                .setEnteringDate(LocalDateTime.of(2021, 9, 24, 16, 0))
                 .setQrPicture("Picture")
                 .setUuid(uuid)
                 .setQrDeliveryEntity(save)
