@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import ru.unit.techno.ariss.barrier.api.BarrierFeignClient;
 import ru.unit.techno.ariss.barrier.api.dto.BarrierRequestDto;
 import ru.unit.techno.ariss.barrier.api.dto.BarrierResponseDto;
+import ru.unit.techno.ariss.barrier.api.enums.BarrierResponseStatus;
 import ru.unit.techno.device.registration.api.DeviceResource;
 import ru.unit.techno.device.registration.api.dto.DeviceResponseDto;
 import ru.unit.techno.device.registration.api.enums.DeviceType;
@@ -40,7 +41,7 @@ public class CardReturningValidation extends BaseTestClass {
     public void cardReturningPos() {
         UUID uuid = UUID.randomUUID();
 
-        OngoingStubbing<DeviceResponseDto> deviceResponseDtoOngoingStubbing = Mockito.when(deviceResource.getGroupDevices(9999L, DeviceType.CARD))
+        Mockito.when(deviceResource.getGroupDevices(9999L, DeviceType.CARD))
                 .thenReturn(new DeviceResponseDto().setEntryAddress("unknown").setDeviceId(1239L).setType("ENTRY"));
 
         BarrierRequestDto barrierRequestDto = reqRespMapper.entryDeviceToRequest(new DeviceResponseDto()

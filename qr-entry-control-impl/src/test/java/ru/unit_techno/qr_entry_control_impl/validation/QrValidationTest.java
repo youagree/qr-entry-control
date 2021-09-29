@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import ru.unit.techno.ariss.barrier.api.BarrierFeignClient;
 import ru.unit.techno.ariss.barrier.api.dto.BarrierRequestDto;
 import ru.unit.techno.ariss.barrier.api.dto.BarrierResponseDto;
+import ru.unit.techno.ariss.barrier.api.enums.BarrierResponseStatus;
 import ru.unit.techno.device.registration.api.DeviceResource;
 import ru.unit.techno.device.registration.api.dto.DeviceResponseDto;
 import ru.unit.techno.device.registration.api.enums.DeviceType;
@@ -38,7 +39,7 @@ public class QrValidationTest extends BaseTestClass {
     public void receiveQrMessageTest() {
         UUID uuid = UUID.randomUUID();
         Mockito.when(deviceResource.getGroupDevices(7765L, DeviceType.QR))
-                .thenReturn(new DeviceResponseDto().setEntryAddress("unknow").setDeviceId(1239L).setType("ENTRY"));
+                .thenReturn(new DeviceResponseDto().setEntryAddress("unknown").setDeviceId(1239L).setType("ENTRY"));
 
         BarrierRequestDto barrierRequestDto = reqRespMapper.entryDeviceToRequest(new DeviceResponseDto()
                 .setEntryAddress("unknown")
