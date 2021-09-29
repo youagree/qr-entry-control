@@ -2,11 +2,17 @@
 package ru.unit_techno.qr_entry_control_impl.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.unit_techno.qr_entry_control_impl.dto.QrCodeDto;
 import ru.unit_techno.qr_entry_control_impl.dto.service.QrObjectTemplateDto;
 import ru.unit_techno.qr_entry_control_impl.service.QrService;
 import ru.unit_techno.qr_entry_control_impl.service.QrValidationService;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/ui/qr")
@@ -17,8 +23,8 @@ public class QrController {
     private final QrValidationService qrValidationService;
 
     @PostMapping("/createAndSend")
-    public Long createQrAndSend(@RequestBody QrCodeDto qrCodeDto) {
-       return qrService.createAndSendQrToEmail(qrCodeDto);
+    public Long createQrAndSend(@Valid @RequestBody QrCodeDto qrCodeDto) {
+        return qrService.createAndSendQrToEmail(qrCodeDto);
     }
 
     @PostMapping("/receiveQrCode/{deviceId}")

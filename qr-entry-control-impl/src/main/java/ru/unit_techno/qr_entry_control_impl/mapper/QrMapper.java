@@ -17,11 +17,4 @@ public interface QrMapper {
     QrCodeDto toDto(QrCodeEntity qrCodeEntity);
 
     QrObjectTemplateDto toTempQrObject(QrCodeDto qrCodeDto);
-
-    default Boolean setExpire(Boolean expire){
-        return false;
-    }
-
-
-
 }

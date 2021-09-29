@@ -1,6 +1,5 @@
 package ru.unit_techno.qr_entry_control_impl.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +27,6 @@ import java.util.UUID;
 public class QrValidationService {
 
     private final QrRepository repository;
-    private final ObjectMapper mapper;
     private final DeviceResource deviceResource;
     private final BarrierFeignClient barrierFeignClient;
     private final EntryDeviceToReqRespMapper reqRespMapper;

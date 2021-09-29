@@ -19,3 +19,7 @@ event:
     2345:
       info: "задний проход"
       entryType: IN
+
+eureka:
+  client:
+    enabled: false

@@ -1,5 +1,5 @@
 
-package ru.unit_techno.qr_entry_control_imp.config;
+package ru.unit_techno.qr_entry_control_impl.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +16,7 @@ public class SwaggerConfig {
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("ru.unit_techno.qr_entry_control_imp"))
+                .apis(RequestHandlerSelectors.basePackage("ru.unit_techno.qr_entry_control_impl"))
                 .paths(PathSelectors.any())
                 .build();
     }
