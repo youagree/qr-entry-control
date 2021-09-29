@@ -2,6 +2,7 @@
 package ru.unit_techno.qr_entry_control_impl.base;
 
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -11,6 +12,8 @@ import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import ru.unit_techno.qr_entry_control_impl.mapper.EntryDeviceToReqRespMapper;
+import ru.unit_techno.qr_entry_control_impl.repository.CardRepository;
+import ru.unit_techno.qr_entry_control_impl.repository.QrDeliveryEntityRepository;
 import ru.unit_techno.qr_entry_control_impl.repository.QrRepository;
 
 import java.time.Duration;
@@ -26,7 +29,13 @@ public class BaseTestClass {
     protected JdbcTemplate jdbcTemplate;
 
     @Autowired
+    protected QrDeliveryEntityRepository qrDeliveryEntityRepository;
+
+    @Autowired
     protected EntryDeviceToReqRespMapper reqRespMapper;
+
+    @Autowired
+    protected CardRepository cardRepository;
 
     protected ObjectMapper objectMapper = new ObjectMapper();
 
@@ -56,5 +65,12 @@ public class BaseTestClass {
     }
 
     public void destroy() {
+    }
+
+    @AfterEach
+    private void clearRepo() {
+        cardRepository.deleteAll();
+        qrDeliveryEntityRepository.deleteAll();
+        qrRepository.deleteAll();
     }
 }
