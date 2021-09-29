@@ -33,7 +33,7 @@ public class CardReturningValidation extends BaseTestClass {
     @MockBean
     private BarrierFeignClient barrierFeignClient;
 
-    public static final String BASE_URL = "/ui/card";
+    public static final String BASE_URL = "/api/card";
 
     @Test
     @DisplayName("Сдача карты, позитивный кейс")

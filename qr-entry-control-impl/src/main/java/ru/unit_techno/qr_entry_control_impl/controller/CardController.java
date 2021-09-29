@@ -6,7 +6,7 @@ import ru.unit_techno.qr_entry_control_impl.dto.QrCodeDto;
 import ru.unit_techno.qr_entry_control_impl.service.CardService;
 
 @RestController
-@RequestMapping("/ui/card")
+@RequestMapping("/api/card")
 @RequiredArgsConstructor
 public class CardController {
 

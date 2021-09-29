@@ -38,11 +38,11 @@ public class CardService {
     @SneakyThrows
     @Transactional
     public void returnCard(String cardValue, Long deviceId) {
-        Optional<CardEntity> byId = cardRepository.findByCardValue(cardValue);
+        Optional<CardEntity> issuedCard = cardRepository.findByCardValue(cardValue);
         CardEntity card = null;
 
-        if (byId.isPresent()) {
-            card = byId.get();
+        if (issuedCard.isPresent()) {
+            card = issuedCard.get();
         }
 
         if (card != null && card.getCardStatus() == CardStatus.ISSUED) {
@@ -55,11 +55,11 @@ public class CardService {
         QrCodeEntity qrCodeEntity = qrRepository.findByCardId(save.getId());
 
         try {
-            qrRepository.returnCard(save);
-
             DeviceResponseDto entryDevice = deviceResource.getGroupDevices(deviceId, DeviceType.CARD);
             BarrierRequestDto barrierRequest = reqRespMapper.entryDeviceToRequest(entryDevice);
             BarrierResponseDto barrierResponse = barrierFeignClient.openBarrier(barrierRequest);
+
+            qrRepository.returnCard(save);
 
             logActionBuilder.buildActionObjectAndLogAction(barrierResponse.getBarrierId(),
                     qrCodeEntity.getQrId(),
