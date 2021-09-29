@@ -23,6 +23,6 @@ public class QrCodeDto {
     private String surname;
     @NotNull
     @FutureOrPresent(message = "время не может быть передано в прошлом времени")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime enteringDate;
 }
