@@ -59,6 +59,7 @@ public class QrService {
             //TODO дооработать, передавать дату вьезда
             put("date", "27.04.2021");
             put("senderName", "Технический пользователь, ");
+            put("pathToQr", "temp/" + qrPictureObject.getFilePath());
         }};
 
         qrPictureObject.setMetadataForSendMessage(map);
