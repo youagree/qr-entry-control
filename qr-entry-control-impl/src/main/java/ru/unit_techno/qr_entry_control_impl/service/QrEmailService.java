@@ -32,7 +32,7 @@ public class QrEmailService implements EmailService {
     private final SpringTemplateEngine thymeleafTemplateEngine;
     private final MessageStorageService messageStorageService;
     private final QrDeliveryEntityRepository qrDeliveryEntityRepository;
-    @Value("classpath:/mail-logo.png")
+    @Value("classpath:/logo.png")
     private Resource resourceFile;
 
     @Override
@@ -43,9 +43,8 @@ public class QrEmailService implements EmailService {
         try {
             Context thymeleafContext = new Context();
             thymeleafContext.setVariables(qrPictureObject.getMetadataForSendMessage());
-            String htmlBody = thymeleafTemplateEngine.process("template-thymeleaf.html", thymeleafContext);
+            String htmlBody = thymeleafTemplateEngine.process("qr-template.html", thymeleafContext);
             sendHtmlMessage(to, subject, htmlBody, qrPictureObject.getFilePath());
-            //TODO добавить удаление qr кода(картинки)
             deleteSuccessSendingQr(qrPictureObject.getFilePath());
             qrDeliveryEntityRepository.updateStatus(qrPictureObject.getDeliveryEntityId(), DeliveryStatus.DELIVERED);
             return true;
@@ -82,7 +81,7 @@ public class QrEmailService implements EmailService {
 
         //add image inside message
         helper.addInline("qr-code-for-send.png", new FileSystemResource(new File("temp\\" + pathToQr)), "image/png");
-
+        helper.addInline("logo.png", resourceFile);
         javaMailSender.send(message);
     }
 }

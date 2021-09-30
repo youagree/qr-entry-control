@@ -50,3 +50,7 @@ qr-entry-control:
     delete-expired-qr-job: "*/30 * * * * *"
     expiring-old-qr-job: "*/45 * * * * *"
     time-zone: "Europe/Moscow"
+
+eureka:
+  client:
+    enabled: false
