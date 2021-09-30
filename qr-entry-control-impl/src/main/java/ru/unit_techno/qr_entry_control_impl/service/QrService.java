@@ -16,7 +16,12 @@ import ru.unit_techno.qr_entry_control_impl.mapper.QrMapper;
 import ru.unit_techno.qr_entry_control_impl.repository.QrRepository;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.UUID;
 
 @Service
@@ -38,12 +43,6 @@ public class QrService {
 
         QrCodeEntity qrCodeForSave = qrMapper.toDomain(qrCodeDto);
         QrCodeEntity byQrPicture = qrRepository.findByQrPicture(qrPictureObject.getQrImageInBase64());
-        //TODO проверять по планируемой дате въезда вместо этого ГОВНА
-        if (byQrPicture != null) {
-            if (byQrPicture.getQrDeliveryEntity().getDeliveryStatus().getValue().equals(DeliveryStatus.NOT_DELIVERED.getValue())) {
-                return null;
-            }
-        }
         qrCodeForSave.setQrPicture(qrPictureObject.getQrImageInBase64());
         qrCodeForSave.setCreationDate(new Timestamp(System.currentTimeMillis()));
         qrCodeForSave.setQrDeliveryEntity(new QrDeliveryEntity()
@@ -53,16 +52,7 @@ public class QrService {
 
         Long deliveryId = save.getQrDeliveryEntity().getId();
         qrPictureObject.setDeliveryEntityId(deliveryId);
-
-        HashMap<String, Object> map = new HashMap<>() {{
-            put("surname", qrCodeForSave.getSurname() + " " + qrCodeForSave.getName());
-            //TODO дооработать, передавать дату вьезда
-            put("date", "27.04.2021");
-            put("senderName", "Технический пользователь, ");
-            put("pathToQr", "temp/" + qrPictureObject.getFilePath());
-        }};
-
-        qrPictureObject.setMetadataForSendMessage(map);
+        qrPictureObject.setMetadataForSendMessage(buildMetadataForMessage(qrPictureObject, qrCodeForSave));
 
         boolean deliveryResult = qrEmailService.sendMessageUsingThymeleafTemplate(
                 qrCodeDto.getEmail(),
@@ -72,7 +62,20 @@ public class QrService {
         if (!deliveryResult) {
             throw new DeliverySendException("message not delivery");
         }
-
         return qrCodeForSave.getQrId();
+    }
+
+    private HashMap<String, Object> buildMetadataForMessage(QrPictureObject qrPictureObject, QrCodeEntity qrCodeForSave) {
+        LocalDateTime enteringDate = qrCodeForSave.getEnteringDate();
+        String resultDate =
+                DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)
+                        .withLocale(new Locale("ru"))
+                        .format(LocalDate.of(enteringDate.getYear(), enteringDate.getMonth(), enteringDate.getDayOfMonth()));
+        String withCorrectYear = resultDate.replaceAll("г\\.", "года");
+        return new HashMap<>() {{
+            put("surname", qrCodeForSave.getName() + " " + qrCodeForSave.getSurname() + "!");
+            put("date", withCorrectYear);
+            put("pathToQr", "temp/" + qrPictureObject.getFilePath());
+        }};
     }
 }

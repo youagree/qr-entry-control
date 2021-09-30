@@ -54,7 +54,7 @@ public class QrCodeEntity {
     @Basic
     @Column(name = "entering_date")
     private LocalDateTime enteringDate;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "qr_delivery_id", referencedColumnName = "id")
     private QrDeliveryEntity qrDeliveryEntity;
     @OneToOne
