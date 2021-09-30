@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.BindMode;
@@ -36,6 +37,9 @@ public class BaseTestClass {
 
     @Autowired
     protected CardRepository cardRepository;
+
+    @Autowired
+    protected JavaMailSender javaMailSender;
 
     protected ObjectMapper objectMapper = new ObjectMapper();
 
