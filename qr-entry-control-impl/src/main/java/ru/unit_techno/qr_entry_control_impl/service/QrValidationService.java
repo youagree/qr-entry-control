@@ -21,7 +21,6 @@ import ru.unit_techno.qr_entry_control_impl.mapper.EntryDeviceToReqRespMapper;
 import ru.unit_techno.qr_entry_control_impl.repository.QrRepository;
 
 import java.util.Optional;
-import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -50,11 +49,12 @@ public class QrValidationService {
             BarrierRequestDto barrierRequest = reqRespMapper.entryDeviceToRequest(entryDevice);
             BarrierResponseDto barrierResponse = barrierFeignClient.openBarrier(barrierRequest);
 
-            //todo выдача карточки КАК В АЭРОПОРТУ и открытие шлагбаума(вызов прошивки)
+            //todo выдача карточки КАК В АЭРОПОРТУ и открытие шлагбаума(вызов прошивки) и получение номера карты
+
             qrCodeEnt.setExpire(true);
             qrCodeEnt.addCard(
                     new CardEntity()
-                            .setCardValue(inputQrFromFirmware.getCardInfo().getCardValue())
+                            .setCardValue("return value from firmware")
                             .setCardStatus(CardStatus.ISSUED)
             );
 
@@ -67,9 +67,8 @@ public class QrValidationService {
             log.info("qr codie is {}", qrCodeEnt);
         } else {
             logActionBuilder.buildActionObjectAndLogAction(deviceId,
-                    //todo возможно стоит использовать лонг, а не юид, либо переделывать тип в библиотеке
-                    //inputQrFromFirmware.getUUID()
-                    new Random().nextLong(),
+                    //fixme есть риск записать не то, либо npe
+                    qrObj.get().getQrId(),
                     inputQrFromFirmware.getGovernmentNumber(),
                     null,
                     true,

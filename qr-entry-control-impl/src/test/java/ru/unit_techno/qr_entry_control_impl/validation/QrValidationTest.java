@@ -15,7 +15,6 @@ import ru.unit.techno.device.registration.api.dto.DeviceResponseDto;
 import ru.unit.techno.device.registration.api.enums.DeviceType;
 import ru.unit_techno.qr_entry_control_impl.base.BaseTestClass;
 import ru.unit_techno.qr_entry_control_impl.dto.InputQrFromFirmware;
-import ru.unit_techno.qr_entry_control_impl.dto.service.CardInfo;
 import ru.unit_techno.qr_entry_control_impl.entity.CardEntity;
 import ru.unit_techno.qr_entry_control_impl.entity.QrCodeEntity;
 import ru.unit_techno.qr_entry_control_impl.entity.QrDeliveryEntity;
@@ -70,10 +69,7 @@ public class QrValidationTest extends BaseTestClass {
 
         InputQrFromFirmware inputQrFromFirmware = new InputQrFromFirmware()
                 .setUUID(String.valueOf(uuid))
-                .setGovernmentNumber("А777АА 77")
-                .setCardInfo(
-                        new CardInfo().setCardValue("test_value")
-                );
+                .setGovernmentNumber("А777АА 77");
 
         String resultUrl = BASE_URL + "/receiveQrCode/7765";
 
@@ -83,7 +79,7 @@ public class QrValidationTest extends BaseTestClass {
         Assertions.assertEquals(all.size(), 1);
 
         CardEntity cardEntity = all.get(0);
-        Assertions.assertEquals(cardEntity.getCardValue(), "test_value");
+        Assertions.assertEquals(cardEntity.getCardValue(), "return value from firmware");
         Assertions.assertEquals(cardEntity.getCardStatus(), CardStatus.ISSUED);
         Assertions.assertNotNull(cardEntity.getQrCodeEntity());
 

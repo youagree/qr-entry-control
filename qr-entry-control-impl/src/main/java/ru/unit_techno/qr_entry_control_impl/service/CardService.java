@@ -58,6 +58,7 @@ public class CardService {
             BarrierRequestDto barrierRequest = reqRespMapper.entryDeviceToRequest(entryDevice);
             BarrierResponseDto barrierResponse = barrierFeignClient.openBarrier(barrierRequest);
 
+            //после присвоения null у qr, карточка удаляется автоматически
             qrCodeEntity.setCard(null);
             qrRepository.save(qrCodeEntity);
 

@@ -21,6 +21,7 @@ public class QrMaintenanceScheduler {
     @Scheduled(cron = "${qr-entry-control.cron.delete-expired-qr-job}", zone = "${qr-entry-control.cron.time-zone}")
     @Transactional
     public void deleteExpiredQr() {
+        //todo не забыть проверку, что карточка не null;
         log.info("Start deleting expired QR codes");
         qrRepository.deleteAllByExpireTrue();
         log.info("Deleting successful");
