@@ -13,8 +13,10 @@ import ru.unit.techno.ariss.log.action.lib.model.ActionStatus;
 import ru.unit.techno.device.registration.api.DeviceResource;
 import ru.unit.techno.device.registration.api.dto.DeviceResponseDto;
 import ru.unit.techno.device.registration.api.enums.DeviceType;
-import ru.unit_techno.qr_entry_control_impl.dto.service.QrObjectTemplateDto;
+import ru.unit_techno.qr_entry_control_impl.dto.InputQrFromFirmware;
+import ru.unit_techno.qr_entry_control_impl.entity.CardEntity;
 import ru.unit_techno.qr_entry_control_impl.entity.QrCodeEntity;
+import ru.unit_techno.qr_entry_control_impl.entity.enums.CardStatus;
 import ru.unit_techno.qr_entry_control_impl.mapper.EntryDeviceToReqRespMapper;
 import ru.unit_techno.qr_entry_control_impl.repository.QrRepository;
 
@@ -33,10 +35,8 @@ public class QrValidationService {
     private final LogActionBuilder logActionBuilder;
 
     @SneakyThrows
-    public void parseQrCodeMessage(QrObjectTemplateDto qrMessage, Long deviceId) {
-        /// TODO: 24.09.2021 Валидировать объект QrObjectTemplateDto на null поля.
-
-        Optional<QrCodeEntity> qrObj = repository.findByUuid(UUID.fromString(qrMessage.getUuid()));
+    public void parseQrCodeMessage(InputQrFromFirmware inputQrFromFirmware, Long deviceId) {
+        Optional<QrCodeEntity> qrObj = repository.findByUuid(UUID.fromString(inputQrFromFirmware.getUUID()));
 
         //TODO проверять дату въезда, если вдруг человек заказал на завтра,приехал сегодня
         if (qrObj.isPresent()) {
@@ -44,23 +44,32 @@ public class QrValidationService {
             if (qrCodeEnt.getExpire()) {
                 throw new Exception("QR code has expired! Try generate new QR code and use it! Expire date: " + qrCodeEnt.getExpire().toString());
             }
-            //todo выдача карточки КАК В АЭРОПОРТУ и открытие шлагбаума
+
             DeviceResponseDto entryDevice = deviceResource.getGroupDevices(deviceId, DeviceType.QR);
             BarrierRequestDto barrierRequest = reqRespMapper.entryDeviceToRequest(entryDevice);
             BarrierResponseDto barrierResponse = barrierFeignClient.openBarrier(barrierRequest);
+
+            //todo выдача карточки КАК В АЭРОПОРТУ и открытие шлагбаума(вызов прошивки) и получение номера карты
+
+            qrCodeEnt.setExpire(true);
+            qrCodeEnt.addCard(
+                    new CardEntity()
+                            .setCardValue("return value from firmware")
+                            .setCardStatus(CardStatus.ISSUED)
+            );
 
             logActionBuilder.buildActionObjectAndLogAction(barrierResponse.getBarrierId(),
                     qrCodeEnt.getQrId(),
                     qrCodeEnt.getGovernmentNumber(),
                     ActionStatus.UNKNOWN);
 
-            qrCodeEnt.setExpire(true);
             repository.save(qrCodeEnt);
-            log.info(qrCodeEnt.toString());
+            log.info("qr codie is {}", qrCodeEnt);
         } else {
             logActionBuilder.buildActionObjectAndLogAction(deviceId,
-                    qrMessage.getId(),
-                    qrMessage.getGovernmentNumber(),
+                    //fixme есть риск записать не то, либо npe
+                    qrObj.get().getQrId(),
+                    inputQrFromFirmware.getGovernmentNumber(),
                     null,
                     true,
                     new Description()

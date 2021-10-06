@@ -21,7 +21,6 @@ import ru.unit_techno.qr_entry_control_impl.repository.CardRepository;
 import ru.unit_techno.qr_entry_control_impl.repository.QrRepository;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -59,7 +58,9 @@ public class CardService {
             BarrierRequestDto barrierRequest = reqRespMapper.entryDeviceToRequest(entryDevice);
             BarrierResponseDto barrierResponse = barrierFeignClient.openBarrier(barrierRequest);
 
-            qrRepository.returnCard(save);
+            //после присвоения null у qr, карточка удаляется автоматически
+            qrCodeEntity.setCard(null);
+            qrRepository.save(qrCodeEntity);
 
             logActionBuilder.buildActionObjectAndLogAction(barrierResponse.getBarrierId(),
                     qrCodeEntity.getQrId(),

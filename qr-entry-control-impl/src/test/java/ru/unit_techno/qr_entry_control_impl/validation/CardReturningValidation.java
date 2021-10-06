@@ -4,13 +4,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import ru.unit.techno.ariss.barrier.api.BarrierFeignClient;
 import ru.unit.techno.ariss.barrier.api.dto.BarrierRequestDto;
 import ru.unit.techno.ariss.barrier.api.dto.BarrierResponseDto;
-import ru.unit.techno.ariss.barrier.api.enums.BarrierResponseStatus;
 import ru.unit.techno.device.registration.api.DeviceResource;
 import ru.unit.techno.device.registration.api.dto.DeviceResponseDto;
 import ru.unit.techno.device.registration.api.enums.DeviceType;
@@ -54,14 +52,11 @@ public class CardReturningValidation extends BaseTestClass {
                         .setBarrierId(1239L)
                         .setBarrierResponseStatus(null));
 
-        QrDeliveryEntity save = qrDeliveryEntityRepository.save(new QrDeliveryEntity()
-                .setId(3L)
-                .setDeliveryStatus(DeliveryStatus.DELIVERED));
+        CardEntity j = new CardEntity()
+                .setCardValue("тупорылый")
+                .setCardStatus(CardStatus.ISSUED);
 
-        CardEntity cardSave = cardRepository.save(new CardEntity().setId(2L)
-                .setCardValue("тупорылый").setCardStatus(CardStatus.ISSUED));
-
-        QrCodeEntity qrCode = qrRepository.save(new QrCodeEntity()
+        QrCodeEntity qrCodeEntity = new QrCodeEntity()
                 .setExpire(false)
                 .setName("Ignat")
                 .setSurname("Zalupin")
@@ -71,17 +66,21 @@ public class CardReturningValidation extends BaseTestClass {
                 .setEnteringDate(LocalDateTime.of(2021, 9, 24, 16, 0))
                 .setQrPicture("Picture")
                 .setUuid(uuid)
-                .setQrDeliveryEntity(save)
-                .setCard(cardSave));
+                .setQrDeliveryEntity(new QrDeliveryEntity()
+                        .setDeliveryStatus(DeliveryStatus.DELIVERED));
+
+        qrCodeEntity.addCard(j);
+
+        QrCodeEntity qrCode = qrRepository.save(qrCodeEntity);
 
         String resultUrl = BASE_URL + "/return/" + "тупорылый?deviceId=9999";
 
         testUtils.invokePostApi(Void.class, resultUrl, HttpStatus.OK, null);
 
-        Optional<QrCodeEntity> byId = qrRepository.findById(qrCode.getQrId());
-        Optional<CardEntity> byId1 = cardRepository.findById(cardSave.getId());
+        Optional<QrCodeEntity> existQrCodeEntity = qrRepository.findById(qrCode.getQrId());
+        Optional<CardEntity> deletedCard = cardRepository.findById(qrCodeEntity.getCard().getId());
 
-        Assertions.assertNull(byId.get().getCard());
-        Assertions.assertEquals(byId1.get().getCardStatus(), CardStatus.RETURNED);
+        Assertions.assertNull(existQrCodeEntity.get().getCard());
+        Assertions.assertTrue(deletedCard.isEmpty());
     }
 }

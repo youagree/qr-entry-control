@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class QrObjectTemplateDto {
-    private Long id;
     private String uuid;
     private String governmentNumber;
     private String name;

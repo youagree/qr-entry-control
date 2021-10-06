@@ -42,7 +42,6 @@ public class QrService {
         QrPictureObject qrPictureObject = qrGeneratorService.generateQrPictureObject(qrObjectTemplateDto);
 
         QrCodeEntity qrCodeForSave = qrMapper.toDomain(qrCodeDto);
-        QrCodeEntity byQrPicture = qrRepository.findByQrPicture(qrPictureObject.getQrImageInBase64());
         qrCodeForSave.setQrPicture(qrPictureObject.getQrImageInBase64());
         qrCodeForSave.setCreationDate(new Timestamp(System.currentTimeMillis()));
         qrCodeForSave.setQrDeliveryEntity(new QrDeliveryEntity()

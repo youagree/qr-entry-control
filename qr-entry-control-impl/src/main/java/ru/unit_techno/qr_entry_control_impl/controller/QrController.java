@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.unit_techno.qr_entry_control_impl.dto.InputQrFromFirmware;
 import ru.unit_techno.qr_entry_control_impl.dto.QrCodeDto;
-import ru.unit_techno.qr_entry_control_impl.dto.service.QrObjectTemplateDto;
 import ru.unit_techno.qr_entry_control_impl.service.QrService;
 import ru.unit_techno.qr_entry_control_impl.service.QrValidationService;
 
@@ -28,7 +28,7 @@ public class QrController {
     }
 
     @PostMapping("/receiveQrCode/{deviceId}")
-    public void receiveQrCode(@RequestBody QrObjectTemplateDto qrCodeMessage, @PathVariable Long deviceId) {
-        qrValidationService.parseQrCodeMessage(qrCodeMessage, deviceId);
+    public void receiveQrCode(@RequestBody InputQrFromFirmware inputQrFromFirmware, @PathVariable Long deviceId) {
+        qrValidationService.parseQrCodeMessage(inputQrFromFirmware, deviceId);
     }
 }

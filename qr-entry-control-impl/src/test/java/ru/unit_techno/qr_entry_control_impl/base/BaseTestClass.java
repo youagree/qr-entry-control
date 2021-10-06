@@ -11,7 +11,6 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 import ru.unit_techno.qr_entry_control_impl.mapper.EntryDeviceToReqRespMapper;
 import ru.unit_techno.qr_entry_control_impl.repository.CardRepository;
 import ru.unit_techno.qr_entry_control_impl.repository.QrDeliveryEntityRepository;
@@ -41,8 +40,6 @@ public class BaseTestClass {
     @Autowired
     protected JavaMailSender javaMailSender;
 
-    protected ObjectMapper objectMapper = new ObjectMapper();
-
     @Autowired
     protected QrRepository qrRepository;
 
@@ -68,11 +65,8 @@ public class BaseTestClass {
         registry.add("spring.datasource.url", () -> DB_URL);
     }
 
-    public void destroy() {
-    }
-
     @AfterEach
-    private void clearRepo() {
+    public void clearRepo() {
         cardRepository.deleteAll();
         qrDeliveryEntityRepository.deleteAll();
         qrRepository.deleteAll();
