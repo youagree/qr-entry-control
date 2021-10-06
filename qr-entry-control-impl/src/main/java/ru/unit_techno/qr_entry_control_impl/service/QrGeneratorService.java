@@ -25,7 +25,6 @@ public class QrGeneratorService {
 
     private final ObjectMapper mapper;
 
-    //TODO добавить создание папки, если ее ранее не было /temp
     @SneakyThrows
     public QrPictureObject generateQrPictureObject (QrObjectTemplateDto qrObjectDto) {
         createDirectoryIfNotExist();

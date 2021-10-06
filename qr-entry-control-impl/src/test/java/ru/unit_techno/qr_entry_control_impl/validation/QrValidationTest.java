@@ -86,6 +86,8 @@ public class QrValidationTest extends BaseTestClass {
         Assertions.assertEquals(cardEntity.getCardValue(), "test_value");
         Assertions.assertEquals(cardEntity.getCardStatus(), CardStatus.ISSUED);
         Assertions.assertNotNull(cardEntity.getQrCodeEntity());
-        /// TODO: 24.09.2021 Добавить ассерты на эвенты, и может еще что-то проверить, доделать тест
+
+
+        /// TODO: 24.09.2021 Добавить ассерты на эвенты
     }
 }

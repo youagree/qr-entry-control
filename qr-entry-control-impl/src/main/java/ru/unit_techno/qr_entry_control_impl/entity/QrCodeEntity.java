@@ -57,7 +57,6 @@ public class QrCodeEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "qr_delivery_id", referencedColumnName = "id")
     private QrDeliveryEntity qrDeliveryEntity;
-    //todo проверить, что после обнуления ссылки кард энтити удаляется
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "card", referencedColumnName = "id")
     private CardEntity card;

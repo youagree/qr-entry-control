@@ -37,8 +37,6 @@ public class QrValidationService {
 
     @SneakyThrows
     public void parseQrCodeMessage(InputQrFromFirmware inputQrFromFirmware, Long deviceId) {
-        /// TODO: 24.09.2021 Валидировать объект QrObjectTemplateDto на null поля.
-
         Optional<QrCodeEntity> qrObj = repository.findByUuid(UUID.fromString(inputQrFromFirmware.getUUID()));
 
         //TODO проверять дату въезда, если вдруг человек заказал на завтра,приехал сегодня
@@ -47,11 +45,12 @@ public class QrValidationService {
             if (qrCodeEnt.getExpire()) {
                 throw new Exception("QR code has expired! Try generate new QR code and use it! Expire date: " + qrCodeEnt.getExpire().toString());
             }
-            //todo выдача карточки КАК В АЭРОПОРТУ и открытие шлагбаума
+
             DeviceResponseDto entryDevice = deviceResource.getGroupDevices(deviceId, DeviceType.QR);
             BarrierRequestDto barrierRequest = reqRespMapper.entryDeviceToRequest(entryDevice);
             BarrierResponseDto barrierResponse = barrierFeignClient.openBarrier(barrierRequest);
 
+            //todo выдача карточки КАК В АЭРОПОРТУ и открытие шлагбаума(вызов прошивки)
             qrCodeEnt.setExpire(true);
             qrCodeEnt.addCard(
                     new CardEntity()
