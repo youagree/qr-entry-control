@@ -23,3 +23,9 @@ event:
 eureka:
   client:
     enabled: false
+
+qr-entry-control:
+  cron:
+    delete-expired-qr-job: "-"
+    expiring-old-qr-job: "-"
+    time-zone: "Europe/Moscow"

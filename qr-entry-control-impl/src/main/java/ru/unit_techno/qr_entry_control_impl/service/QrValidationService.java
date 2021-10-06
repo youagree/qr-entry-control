@@ -13,12 +13,15 @@ import ru.unit.techno.ariss.log.action.lib.model.ActionStatus;
 import ru.unit.techno.device.registration.api.DeviceResource;
 import ru.unit.techno.device.registration.api.dto.DeviceResponseDto;
 import ru.unit.techno.device.registration.api.enums.DeviceType;
-import ru.unit_techno.qr_entry_control_impl.dto.service.QrObjectTemplateDto;
+import ru.unit_techno.qr_entry_control_impl.dto.InputQrFromFirmware;
+import ru.unit_techno.qr_entry_control_impl.entity.CardEntity;
 import ru.unit_techno.qr_entry_control_impl.entity.QrCodeEntity;
+import ru.unit_techno.qr_entry_control_impl.entity.enums.CardStatus;
 import ru.unit_techno.qr_entry_control_impl.mapper.EntryDeviceToReqRespMapper;
 import ru.unit_techno.qr_entry_control_impl.repository.QrRepository;
 
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 @Service
@@ -33,10 +36,10 @@ public class QrValidationService {
     private final LogActionBuilder logActionBuilder;
 
     @SneakyThrows
-    public void parseQrCodeMessage(QrObjectTemplateDto qrMessage, Long deviceId) {
+    public void parseQrCodeMessage(InputQrFromFirmware inputQrFromFirmware, Long deviceId) {
         /// TODO: 24.09.2021 Валидировать объект QrObjectTemplateDto на null поля.
 
-        Optional<QrCodeEntity> qrObj = repository.findByUuid(UUID.fromString(qrMessage.getUuid()));
+        Optional<QrCodeEntity> qrObj = repository.findByUuid(UUID.fromString(inputQrFromFirmware.getUUID()));
 
         //TODO проверять дату въезда, если вдруг человек заказал на завтра,приехал сегодня
         if (qrObj.isPresent()) {
@@ -49,18 +52,26 @@ public class QrValidationService {
             BarrierRequestDto barrierRequest = reqRespMapper.entryDeviceToRequest(entryDevice);
             BarrierResponseDto barrierResponse = barrierFeignClient.openBarrier(barrierRequest);
 
+            qrCodeEnt.setExpire(true);
+            qrCodeEnt.addCard(
+                    new CardEntity()
+                            .setCardValue(inputQrFromFirmware.getCardInfo().getCardValue())
+                            .setCardStatus(CardStatus.ISSUED)
+            );
+
             logActionBuilder.buildActionObjectAndLogAction(barrierResponse.getBarrierId(),
                     qrCodeEnt.getQrId(),
                     qrCodeEnt.getGovernmentNumber(),
                     ActionStatus.UNKNOWN);
 
-            qrCodeEnt.setExpire(true);
             repository.save(qrCodeEnt);
-            log.info(qrCodeEnt.toString());
+            log.info("qr codie is {}", qrCodeEnt);
         } else {
             logActionBuilder.buildActionObjectAndLogAction(deviceId,
-                    qrMessage.getId(),
-                    qrMessage.getGovernmentNumber(),
+                    //todo возможно стоит использовать лонг, а не юид, либо переделывать тип в библиотеке
+                    //inputQrFromFirmware.getUUID()
+                    new Random().nextLong(),
+                    inputQrFromFirmware.getGovernmentNumber(),
                     null,
                     true,
                     new Description()
