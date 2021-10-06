@@ -11,6 +11,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.unit_techno.qr_entry_control_impl.dto.service.QrObjectTemplateDto;
 import ru.unit_techno.qr_entry_control_impl.dto.service.QrPictureObject;
 
@@ -26,6 +27,7 @@ public class QrGeneratorService {
     private final ObjectMapper mapper;
 
     @SneakyThrows
+    @Transactional
     public QrPictureObject generateQrPictureObject (QrObjectTemplateDto qrObjectDto) {
         createDirectoryIfNotExist();
         String path = "temp/" + qrObjectDto.getName() + qrObjectDto.getSurname() + System.currentTimeMillis() + ".png";

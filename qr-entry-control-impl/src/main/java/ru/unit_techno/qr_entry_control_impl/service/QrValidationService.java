@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.unit.techno.ariss.barrier.api.BarrierFeignClient;
 import ru.unit.techno.ariss.barrier.api.dto.BarrierRequestDto;
 import ru.unit.techno.ariss.barrier.api.dto.BarrierResponseDto;
@@ -35,6 +36,7 @@ public class QrValidationService {
     private final LogActionBuilder logActionBuilder;
 
     @SneakyThrows
+    @Transactional
     public void parseQrCodeMessage(InputQrFromFirmware inputQrFromFirmware, Long deviceId) {
         Optional<QrCodeEntity> qrObj = repository.findByUuid(UUID.fromString(inputQrFromFirmware.getUUID()));
 

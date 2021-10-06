@@ -1,32 +1,18 @@
 package ru.unit_techno.qr_entry_control_impl.validation;
 
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.MailException;
-import org.springframework.mail.MailSendException;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import ru.unit_techno.qr_entry_control_impl.base.BaseTestClass;
 import ru.unit_techno.qr_entry_control_impl.dto.QrCodeDto;
-import ru.unit_techno.qr_entry_control_impl.dto.service.QrObjectTemplateDto;
-import ru.unit_techno.qr_entry_control_impl.dto.service.QrPictureObject;
-import ru.unit_techno.qr_entry_control_impl.service.QrGeneratorService;
 
-import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import java.io.File;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 
 public class MailTests extends BaseTestClass {
     String BASE_URL = "/ui/qr";
