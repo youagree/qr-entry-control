@@ -8,7 +8,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import ru.unit_techno.qr_entry_control_impl.base.BaseTestClass;
 import ru.unit_techno.qr_entry_control_impl.dto.QrCodeDto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @DirtiesContext
 public class QrControllerTest extends BaseTestClass {
@@ -21,10 +21,9 @@ public class QrControllerTest extends BaseTestClass {
         testUtils.invokePostApi(Void.class, BASE_URL + "/createAndSend", HttpStatus.BAD_REQUEST,
                 new QrCodeDto()
                         .setEmail("a@ya.ru")
-                        .setName("test_name")
-                        .setSurname("test_surname")
+                        .setFullName("test_name")
                         .setGovernmentNumber("not_valid_number")
-                        .setEnteringDate(LocalDateTime.now().plusYears(1L)));
+                        .setEnteringDate(LocalDate.now().plusYears(1L)));
     }
 
     @Test
@@ -33,9 +32,8 @@ public class QrControllerTest extends BaseTestClass {
         testUtils.invokePostApi(Void.class, BASE_URL + "/createAndSend", HttpStatus.BAD_REQUEST,
                 new QrCodeDto()
                         .setEmail("a@ya.ru")
-                        .setName("test_name")
-                        .setSurname("test_surname")
+                        .setFullName("test_name")
                         .setGovernmentNumber("А123АА 199")
-                        .setEnteringDate(LocalDateTime.now().minusYears(1L)));
+                        .setEnteringDate(LocalDate.now().minusYears(1L)));
     }
 }

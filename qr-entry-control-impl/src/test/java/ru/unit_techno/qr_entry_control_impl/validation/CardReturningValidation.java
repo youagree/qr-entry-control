@@ -20,6 +20,7 @@ import ru.unit_techno.qr_entry_control_impl.entity.enums.CardStatus;
 import ru.unit_techno.qr_entry_control_impl.entity.enums.DeliveryStatus;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -58,12 +59,11 @@ public class CardReturningValidation extends BaseTestClass {
 
         QrCodeEntity qrCodeEntity = new QrCodeEntity()
                 .setExpire(false)
-                .setName("Ignat")
-                .setSurname("Zalupin")
+                .setFullName("Ignat")
                 .setGovernmentNumber("А777АА 77")
                 .setCreationDate(Timestamp.valueOf(LocalDateTime.now()))
                 .setEmail("azaza@gmail.com")
-                .setEnteringDate(LocalDateTime.of(2021, 9, 24, 16, 0))
+                .setEnteringDate(LocalDate.of(2021, 9, 24))
                 .setQrPicture("Picture")
                 .setUuid(uuid)
                 .setQrDeliveryEntity(new QrDeliveryEntity()

@@ -8,7 +8,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Data
 public class QrCodeDto {
@@ -18,11 +18,9 @@ public class QrCodeDto {
     @NotNull
     @Pattern(regexp = "^[АВЕКМНОРСТУХ]\\d{3}[АВЕКМНОРСТУХ]{2} \\d{2,3}$", message = "неправильный формат гос-номера")
     private String governmentNumber;
-    //todo объединить поля в одно
-    private String name;
-    private String surname;
+    private String fullName;
     @NotNull
     @FutureOrPresent(message = "время не может быть передано в прошлом времени")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime enteringDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private LocalDate enteringDate;
 }

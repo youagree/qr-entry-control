@@ -17,7 +17,6 @@ import ru.unit_techno.qr_entry_control_impl.repository.QrRepository;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.HashMap;
@@ -44,6 +43,7 @@ public class QrService {
         QrCodeEntity qrCodeForSave = qrMapper.toDomain(qrCodeDto);
         qrCodeForSave.setQrPicture(qrPictureObject.getQrImageInBase64());
         qrCodeForSave.setCreationDate(new Timestamp(System.currentTimeMillis()));
+        qrCodeForSave.setEnteringDate(qrCodeDto.getEnteringDate());
         qrCodeForSave.setQrDeliveryEntity(new QrDeliveryEntity()
                 .setDeliveryStatus(DeliveryStatus.NOT_DELIVERED)
         );
@@ -65,14 +65,14 @@ public class QrService {
     }
 
     private HashMap<String, Object> buildMetadataForMessage(QrPictureObject qrPictureObject, QrCodeEntity qrCodeForSave) {
-        LocalDateTime enteringDate = qrCodeForSave.getEnteringDate();
+        LocalDate enteringDate = qrCodeForSave.getEnteringDate();
         String resultDate =
                 DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)
                         .withLocale(new Locale("ru"))
                         .format(LocalDate.of(enteringDate.getYear(), enteringDate.getMonth(), enteringDate.getDayOfMonth()));
         String withCorrectYear = resultDate.replaceAll("г\\.", "года");
         return new HashMap<>() {{
-            put("surname", qrCodeForSave.getName() + " " + qrCodeForSave.getSurname() + "!");
+            put("surname", qrCodeForSave.getFullName() + "!");
             put("date", withCorrectYear);
             put("pathToQr", "temp/" + qrPictureObject.getFilePath());
         }};
