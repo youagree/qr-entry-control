@@ -1,5 +1,7 @@
 package ru.unit_techno.qr_entry_control_impl.validation;
 
+import static org.mockito.ArgumentMatchers.any;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -10,9 +12,7 @@ import ru.unit_techno.qr_entry_control_impl.base.BaseTestClass;
 import ru.unit_techno.qr_entry_control_impl.dto.QrCodeDto;
 
 import javax.mail.internet.MimeMessage;
-import java.time.LocalDateTime;
-
-import static org.mockito.ArgumentMatchers.any;
+import java.time.LocalDate;
 
 public class MailTests extends BaseTestClass {
     String BASE_URL = "/ui/qr";
@@ -29,14 +29,14 @@ public class MailTests extends BaseTestClass {
      */
     @Test
     void shouldSendEmailWithCorrectPayloadToUser() throws Exception {
-        Mockito.doThrow(new MailException("sadfas") {}).when(javaMailSender).send(any(MimeMessage.class));
+        Mockito.doThrow(new MailException("sadfas") {
+        }).when(javaMailSender).send(any(MimeMessage.class));
 
         QrCodeDto qrCodeDto = new QrCodeDto()
                 .setEmail("pavsoldatov96@gmail.com")
-                .setName("aa")
-                .setSurname("bb")
+                .setFullName("aa")
                 .setGovernmentNumber("А777АА 77")
-                .setEnteringDate(LocalDateTime.of(2021, 11, 11, 11, 11, 11));
+                .setEnteringDate(LocalDate.of(2021, 11, 11));
 
         String resultUrl = BASE_URL + "/createAndSend";
 

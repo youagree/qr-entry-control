@@ -6,6 +6,5 @@ import lombok.Data;
 public class QrObjectTemplateDto {
     private String uuid;
     private String governmentNumber;
-    private String name;
-    private String surname;
+    private String fullName;
 }

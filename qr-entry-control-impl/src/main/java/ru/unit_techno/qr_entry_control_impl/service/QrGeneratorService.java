@@ -30,7 +30,7 @@ public class QrGeneratorService {
     @Transactional
     public QrPictureObject generateQrPictureObject (QrObjectTemplateDto qrObjectDto) {
         createDirectoryIfNotExist();
-        String path = "temp/" + qrObjectDto.getName() + qrObjectDto.getSurname() + System.currentTimeMillis() + ".png";
+        String path = "temp/" + qrObjectDto.getFullName() + System.currentTimeMillis() + ".png";
         String jsonObject = mapper.writeValueAsString(qrObjectDto);
 
         BitMatrix bitMatrix = new MultiFormatWriter().encode(jsonObject, BarcodeFormat.QR_CODE, 144, 144);

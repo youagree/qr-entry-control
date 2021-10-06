@@ -15,7 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Data
@@ -37,11 +37,8 @@ public class QrCodeEntity {
     @Column(name = "government_number")
     private String governmentNumber;
     @Basic
-    @Column
-    private String name;
-    @Basic
-    @Column
-    private String surname;
+    @Column(name = "full_name")
+    private String fullName;
     @Basic
     @Column
     private String email;
@@ -53,7 +50,7 @@ public class QrCodeEntity {
     private UUID uuid;
     @Basic
     @Column(name = "entering_date")
-    private LocalDateTime enteringDate;
+    private LocalDate enteringDate;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "qr_delivery_id", referencedColumnName = "id")
     private QrDeliveryEntity qrDeliveryEntity;
