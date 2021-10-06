@@ -19,9 +19,6 @@ public class QrCodeDto {
     @Pattern(regexp = "^[АВЕКМНОРСТУХ]\\d{3}[АВЕКМНОРСТУХ]{2} \\d{2,3}$", message = "неправильный формат гос-номера")
     private String governmentNumber;
     private String fullName;
-    //    //todo объединить поля в одно
-//    private String name;
-//    private String surname;
     @NotNull
     @FutureOrPresent(message = "время не может быть передано в прошлом времени")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
