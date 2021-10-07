@@ -53,12 +53,12 @@ public class QrValidationService {
 
             //todo выдача карточки КАК В АЭРОПОРТУ и открытие шлагбаума(вызов прошивки) и получение номера карты
 
-            qrCodeEnt.setExpire(true);
             qrCodeEnt.addCard(
                     new CardEntity()
                             .setCardValue("return value from firmware")
                             .setCardStatus(CardStatus.ISSUED)
             );
+            qrCodeEnt.setExpire(true);
 
             logActionBuilder.buildActionObjectAndLogAction(barrierResponse.getBarrierId(),
                     qrCodeEnt.getQrId(),
