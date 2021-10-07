@@ -21,6 +21,7 @@ import ru.unit_techno.qr_entry_control_impl.entity.enums.CardStatus;
 import ru.unit_techno.qr_entry_control_impl.mapper.EntryDeviceToReqRespMapper;
 import ru.unit_techno.qr_entry_control_impl.repository.QrRepository;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -46,6 +47,8 @@ public class QrValidationService {
             if (qrCodeEnt.getExpire()) {
                 throw new Exception("QR code has expired! Try generate new QR code and use it! Expire date: " + qrCodeEnt.getExpire().toString());
             }
+
+            checkQrEnteringDate(qrCodeEnt);
 
             DeviceResponseDto entryDevice = deviceResource.getGroupDevices(deviceId, DeviceType.QR);
             BarrierRequestDto barrierRequest = reqRespMapper.entryDeviceToRequest(entryDevice);
@@ -78,6 +81,15 @@ public class QrValidationService {
                             .setErroredServiceName("QR")
                             .setMessage("We are no have this QR code in database. Try generate QR code on our website!"));
             throw new Exception("We are no have this QR code in database. Try generate QR code on our website!");
+        }
+    }
+
+    private static void checkQrEnteringDate(QrCodeEntity qrCodeEnt) throws RuntimeException {
+        LocalDate currentDate = LocalDate.now();
+        if (qrCodeEnt.getEnteringDate().getYear() != currentDate.getYear() ||
+                !qrCodeEnt.getEnteringDate().getMonth().equals(currentDate.getMonth()) ||
+                qrCodeEnt.getEnteringDate().getDayOfMonth() != currentDate.getDayOfMonth()) {
+            throw new RuntimeException("Entering date is not today!");
         }
     }
 }

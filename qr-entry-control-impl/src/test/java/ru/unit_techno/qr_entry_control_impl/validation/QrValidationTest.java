@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import ru.unit.techno.ariss.barrier.api.BarrierFeignClient;
@@ -20,6 +21,7 @@ import ru.unit_techno.qr_entry_control_impl.entity.QrCodeEntity;
 import ru.unit_techno.qr_entry_control_impl.entity.QrDeliveryEntity;
 import ru.unit_techno.qr_entry_control_impl.entity.enums.CardStatus;
 import ru.unit_techno.qr_entry_control_impl.entity.enums.DeliveryStatus;
+import ru.unit_techno.qr_entry_control_impl.service.QrValidationService;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -34,6 +36,9 @@ public class QrValidationTest extends BaseTestClass {
 
     @MockBean
     private BarrierFeignClient barrierFeignClient;
+
+    @Autowired
+    private QrValidationService qrValidationService;
 
     public static final String BASE_URL = "/ui/qr";
 
@@ -52,8 +57,8 @@ public class QrValidationTest extends BaseTestClass {
 
         Mockito.when(barrierFeignClient.openBarrier(barrierRequestDto))
                 .thenReturn(new BarrierResponseDto()
-                .setBarrierId(1239L)
-                .setBarrierResponseStatus(null));
+                        .setBarrierId(1239L)
+                        .setBarrierResponseStatus(null));
 
         qrRepository.save(new QrCodeEntity()
                 .setExpire(false)
@@ -61,7 +66,7 @@ public class QrValidationTest extends BaseTestClass {
                 .setGovernmentNumber("А777АА 77")
                 .setCreationDate(Timestamp.valueOf(LocalDateTime.now()))
                 .setEmail("azaza@gmail.com")
-                .setEnteringDate(LocalDate.of(2021, 9, 24))
+                .setEnteringDate(LocalDate.now())
                 .setQrPicture("Picture")
                 .setUuid(uuid)
                 .setQrDeliveryEntity(new QrDeliveryEntity()
@@ -85,5 +90,44 @@ public class QrValidationTest extends BaseTestClass {
 
 
         /// TODO: 24.09.2021 Добавить ассерты на эвенты
+    }
+
+    @SneakyThrows
+    @Test
+    @DisplayName("Скан QR кода и валидация. Позитивный кейс")
+    public void receiveQrMessageTestNegativeDate() {
+        UUID uuid = UUID.randomUUID();
+        Mockito.when(deviceResource.getGroupDevices(7765L, DeviceType.QR))
+                .thenReturn(new DeviceResponseDto().setEntryAddress("unknown").setDeviceId(1239L).setType("ENTRY"));
+
+        BarrierRequestDto barrierRequestDto = reqRespMapper.entryDeviceToRequest(new DeviceResponseDto()
+                .setEntryAddress("unknown")
+                .setDeviceId(1239L)
+                .setType("ENTRY"));
+
+        Mockito.when(barrierFeignClient.openBarrier(barrierRequestDto))
+                .thenReturn(new BarrierResponseDto()
+                        .setBarrierId(1239L)
+                        .setBarrierResponseStatus(null));
+
+        qrRepository.save(new QrCodeEntity()
+                .setExpire(false)
+                .setFullName("Ignat")
+                .setGovernmentNumber("А777АА 77")
+                .setCreationDate(Timestamp.valueOf(LocalDateTime.now()))
+                .setEmail("azaza@gmail.com")
+                .setEnteringDate(LocalDate.of(2021, 9, 24))
+                .setQrPicture("Picture")
+                .setUuid(uuid)
+                .setQrDeliveryEntity(new QrDeliveryEntity()
+                        .setDeliveryStatus(DeliveryStatus.DELIVERED)));
+
+        InputQrFromFirmware inputQrFromFirmware = new InputQrFromFirmware()
+                .setUUID(String.valueOf(uuid))
+                .setGovernmentNumber("А777АА 77");
+
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            qrValidationService.parseQrCodeMessage(inputQrFromFirmware, 7765L);
+        });
     }
 }
