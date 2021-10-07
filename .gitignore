@@ -20,6 +20,9 @@ target/
 *.iml
 *.ipr
 
+### files ###
+*.png
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
