@@ -11,6 +11,8 @@ import java.util.UUID;
 
 public interface QrRepository extends JpaRepository<QrCodeEntity, Long> {
 
+    @Query(value = "delete from QrCodeEntity q where q.expire = true and q.card is null")
+    @Modifying
     void deleteAllByExpireTrue();
 
     @Modifying
