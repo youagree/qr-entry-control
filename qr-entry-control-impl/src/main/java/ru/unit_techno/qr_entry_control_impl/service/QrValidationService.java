@@ -50,11 +50,8 @@ public class QrValidationService {
 
             checkQrEnteringDate(qrCodeEnt);
 
-            DeviceResponseDto entryDevice = deviceResource.getGroupDevices(deviceId, DeviceType.QR);
-            BarrierRequestDto barrierRequest = reqRespMapper.entryDeviceToRequest(entryDevice);
-            BarrierResponseDto barrierResponse = barrierFeignClient.openBarrier(barrierRequest);
-
             //todo выдача карточки КАК В АЭРОПОРТУ и открытие шлагбаума(вызов прошивки) и получение номера карты
+            /// TODO: 07.10.2021 Добавить функционал запроса прошивки
 
             qrCodeEnt.addCard(
                     new CardEntity()
@@ -62,6 +59,10 @@ public class QrValidationService {
                             .setCardStatus(CardStatus.ISSUED)
             );
             qrCodeEnt.setExpire(true);
+
+            DeviceResponseDto entryDevice = deviceResource.getGroupDevices(deviceId, DeviceType.QR);
+            BarrierRequestDto barrierRequest = reqRespMapper.entryDeviceToRequest(entryDevice);
+            BarrierResponseDto barrierResponse = barrierFeignClient.openBarrier(barrierRequest);
 
             logActionBuilder.buildActionObjectAndLogAction(barrierResponse.getBarrierId(),
                     qrCodeEnt.getQrId(),

@@ -94,7 +94,7 @@ public class QrValidationTest extends BaseTestClass {
 
     @SneakyThrows
     @Test
-    @DisplayName("Скан QR кода и валидация. Позитивный кейс")
+    @DisplayName("Скан QR кода и валидация. Негативный кейс с неправильной датой въезда/выезда")
     public void receiveQrMessageTestNegativeDate() {
         UUID uuid = UUID.randomUUID();
         Mockito.when(deviceResource.getGroupDevices(7765L, DeviceType.QR))

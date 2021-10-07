@@ -21,6 +21,7 @@ import ru.unit_techno.qr_entry_control_impl.repository.CardRepository;
 import ru.unit_techno.qr_entry_control_impl.repository.QrRepository;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -53,6 +54,8 @@ public class CardService {
         CardEntity save = cardRepository.save(card);
         QrCodeEntity qrCodeEntity = qrRepository.findByCardId(save.getId());
 
+        checkQrEnteringDate(qrCodeEntity);
+
         try {
             DeviceResponseDto entryDevice = deviceResource.getGroupDevices(deviceId, DeviceType.CARD);
             BarrierRequestDto barrierRequest = reqRespMapper.entryDeviceToRequest(entryDevice);
@@ -78,6 +81,14 @@ public class CardService {
                             .setErroredServiceName("QR")
                             .setMessage("Some problems while returning card in column. Error message: " + e.getMessage()));
         }
+    }
 
+    private static void checkQrEnteringDate(QrCodeEntity qrCodeEnt) throws RuntimeException {
+        LocalDate currentDate = LocalDate.now();
+        if (qrCodeEnt.getEnteringDate().getYear() != currentDate.getYear() ||
+                !qrCodeEnt.getEnteringDate().getMonth().equals(currentDate.getMonth()) ||
+                qrCodeEnt.getEnteringDate().getDayOfMonth() != currentDate.getDayOfMonth()) {
+            throw new RuntimeException("Entering date is not today!");
+        }
     }
 }
