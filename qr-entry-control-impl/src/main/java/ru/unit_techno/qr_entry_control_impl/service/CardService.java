@@ -19,9 +19,9 @@ import ru.unit_techno.qr_entry_control_impl.entity.enums.CardStatus;
 import ru.unit_techno.qr_entry_control_impl.mapper.EntryDeviceToReqRespMapper;
 import ru.unit_techno.qr_entry_control_impl.repository.CardRepository;
 import ru.unit_techno.qr_entry_control_impl.repository.QrRepository;
+import ru.unit_techno.qr_entry_control_impl.util.DateValidator;
 
 import javax.persistence.EntityNotFoundException;
-import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -54,7 +54,7 @@ public class CardService {
         CardEntity save = cardRepository.save(card);
         QrCodeEntity qrCodeEntity = qrRepository.findByCardId(save.getId());
 
-        checkQrEnteringDate(qrCodeEntity);
+        DateValidator.checkQrEnteringDate(qrCodeEntity);
 
         try {
             DeviceResponseDto entryDevice = deviceResource.getGroupDevices(deviceId, DeviceType.CARD);
@@ -80,15 +80,6 @@ public class CardService {
                     new Description()
                             .setErroredServiceName("QR")
                             .setMessage("Some problems while returning card in column. Error message: " + e.getMessage()));
-        }
-    }
-
-    private static void checkQrEnteringDate(QrCodeEntity qrCodeEnt) throws RuntimeException {
-        LocalDate currentDate = LocalDate.now();
-        if (qrCodeEnt.getEnteringDate().getYear() != currentDate.getYear() ||
-                !qrCodeEnt.getEnteringDate().getMonth().equals(currentDate.getMonth()) ||
-                qrCodeEnt.getEnteringDate().getDayOfMonth() != currentDate.getDayOfMonth()) {
-            throw new RuntimeException("Entering date is not today!");
         }
     }
 }

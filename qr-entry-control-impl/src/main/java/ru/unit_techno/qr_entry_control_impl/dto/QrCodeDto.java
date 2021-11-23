@@ -1,6 +1,8 @@
 
 package ru.unit_techno.qr_entry_control_impl.dto;
 
+import static ru.unit_techno.qr_entry_control_impl.util.Constant.REGEX;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
@@ -16,7 +18,8 @@ public class QrCodeDto {
     @NotNull
     private String email;
     @NotNull
-    @Pattern(regexp = "^[АВЕКМНОРСТУХ]\\d{3}[АВЕКМНОРСТУХ]{2} \\d{2,3}$", message = "неправильный формат гос-номера")
+    @Pattern(regexp = REGEX,
+            message = "неправильный формат гос-номера")
     private String governmentNumber;
     private String fullName;
     @NotNull
