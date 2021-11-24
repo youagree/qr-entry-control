@@ -35,8 +35,8 @@ public class MailTests extends BaseTestClass {
         QrCodeDto qrCodeDto = new QrCodeDto()
                 .setEmail("pavsoldatov96@gmail.com")
                 .setFullName("aa")
-                .setGovernmentNumber("А777АА 77")
-                .setEnteringDate(LocalDate.of(2021, 11, 11));
+                .setGovernmentNumber("А777АА77")
+                .setEnteringDate(LocalDate.of(2031, 11, 11));
 
         String resultUrl = BASE_URL + "/createAndSend";
 

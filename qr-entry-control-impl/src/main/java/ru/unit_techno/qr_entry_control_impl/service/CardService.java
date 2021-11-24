@@ -19,6 +19,7 @@ import ru.unit_techno.qr_entry_control_impl.entity.enums.CardStatus;
 import ru.unit_techno.qr_entry_control_impl.mapper.EntryDeviceToReqRespMapper;
 import ru.unit_techno.qr_entry_control_impl.repository.CardRepository;
 import ru.unit_techno.qr_entry_control_impl.repository.QrRepository;
+import ru.unit_techno.qr_entry_control_impl.websocket.WSNotificationService;
 import ru.unit_techno.qr_entry_control_impl.util.DateValidator;
 
 import javax.persistence.EntityNotFoundException;
@@ -34,6 +35,7 @@ public class CardService {
     private final BarrierFeignClient barrierFeignClient;
     private final EntryDeviceToReqRespMapper reqRespMapper;
     private final LogActionBuilder logActionBuilder;
+    private final WSNotificationService notificationService;
 
     @SneakyThrows
     @Transactional
@@ -70,8 +72,8 @@ public class CardService {
                     qrCodeEntity.getGovernmentNumber(),
                     ActionStatus.UNKNOWN);
         } catch (Exception e) {
-            /// TODO: 27.09.2021 Добавить оповещение в сокет
             /// TODO: 27.09.2021 Продумать возможные кейсы ошибок и эксепшенов, сделать обработки
+            notificationService.sendCardNotReturned(qrCodeEntity.getGovernmentNumber());
             logActionBuilder.buildActionObjectAndLogAction(deviceId,
                     qrCodeEntity.getQrId(),
                     qrCodeEntity.getGovernmentNumber(),

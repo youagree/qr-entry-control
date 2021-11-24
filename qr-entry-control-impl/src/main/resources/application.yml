@@ -6,9 +6,13 @@ logging:
     org.springframework.web: INFO
     ru.unit_techno.qr_entry_control_impl: DEBUG
 
+ws:
+  topics:
+    name: "/qr-entry-control/events"
+
 spring:
   application:
-    name: qr-entry-control
+    name: qr-entry-control /qr-entry-control/qr/add
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL94Dialect
     show-sql: true
