@@ -3,9 +3,14 @@ package ru.unit_techno.qr_entry_control_impl.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.unit_techno.qr_entry_control_impl.dto.QrCodeDto;
+import ru.unit_techno.qr_entry_control_impl.dto.QrInfoDto;
 import ru.unit_techno.qr_entry_control_impl.dto.service.QrObjectTemplateDto;
 import ru.unit_techno.qr_entry_control_impl.dto.service.QrPictureObject;
 import ru.unit_techno.qr_entry_control_impl.entity.QrCodeEntity;
@@ -22,6 +27,7 @@ import java.time.format.FormatStyle;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -62,6 +68,14 @@ public class QrService {
             throw new DeliverySendException("message not delivery");
         }
         return qrCodeForSave.getQrId();
+    }
+
+    public Page<QrInfoDto> getAllQrCodesInfo(Specification<QrCodeEntity> specification, Pageable pageable) {
+        Page<QrCodeEntity> allQrCodes = qrRepository.findAll(specification, pageable);
+        return new PageImpl<>(allQrCodes.stream()
+                .filter(qr -> !qr.getExpire())
+                .map(qrMapper::entityToInfo)
+                .collect(Collectors.toList()), pageable, allQrCodes.getTotalPages());
     }
 
     private HashMap<String, Object> buildMetadataForMessage(QrPictureObject qrPictureObject, QrCodeEntity qrCodeForSave) {

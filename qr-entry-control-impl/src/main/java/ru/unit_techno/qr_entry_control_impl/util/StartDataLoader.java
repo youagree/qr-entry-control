@@ -26,16 +26,16 @@ public class StartDataLoader implements CommandLineRunner {
     private final EventRepository repository;
     private final QrRepository qrRepository;
     private final QrDeliveryEntityRepository qrDeliveryEntityRepository;
+    private final EventRepository eventRepository;
 
     @Override
-    @Transactional
     public void run(String... args) {
-        repository.deleteAll();
-//        repository.flush();
+        eventRepository.deleteAll();
+        repository.flush();
         qrDeliveryEntityRepository.deleteAll();
-//        qrDeliveryEntityRepository.flush();
+        qrDeliveryEntityRepository.flush();
         qrRepository.deleteAll();
-//        qrRepository.flush();
+        qrRepository.flush();
 
         Resource resource = new ClassPathResource("test-data-events.sql");
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator(resource);
