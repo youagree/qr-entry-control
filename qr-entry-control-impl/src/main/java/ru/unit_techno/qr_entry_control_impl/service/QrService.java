@@ -19,6 +19,7 @@ import ru.unit_techno.qr_entry_control_impl.entity.enums.DeliveryStatus;
 import ru.unit_techno.qr_entry_control_impl.exception.DeliverySendException;
 import ru.unit_techno.qr_entry_control_impl.mapper.QrMapper;
 import ru.unit_techno.qr_entry_control_impl.repository.QrRepository;
+import ru.unit_techno.qr_entry_control_impl.util.SpecUtils;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -71,9 +72,9 @@ public class QrService {
     }
 
     public Page<QrInfoDto> getAllQrCodesInfo(Specification<QrCodeEntity> specification, Pageable pageable) {
+        SpecUtils.expireFalse(specification);
         Page<QrCodeEntity> allQrCodes = qrRepository.findAll(specification, pageable);
         return new PageImpl<>(allQrCodes.stream()
-                .filter(qr -> !qr.getExpire())
                 .map(qrMapper::entityToInfo)
                 .collect(Collectors.toList()), pageable, allQrCodes.getTotalPages());
     }
