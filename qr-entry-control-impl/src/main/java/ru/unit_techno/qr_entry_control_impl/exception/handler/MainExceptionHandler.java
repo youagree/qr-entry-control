@@ -7,6 +7,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.unit_techno.qr_entry_control_impl.dto.ExceptionHandleDto;
 import ru.unit_techno.qr_entry_control_impl.exception.DeliverySendException;
 
 @Slf4j
@@ -21,7 +22,8 @@ public class MainExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public void handleIllegalArgumentException(Exception ex) {
+    public ExceptionHandleDto handleIllegalArgumentException(Exception ex) {
         log.error("invalid input argument {}", ex.getMessage());
+        return new ExceptionHandleDto().setStatusCode(400).setMessage(ex.getMessage());
     }
 }
