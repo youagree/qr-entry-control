@@ -3,7 +3,7 @@ server:
 
 logging:
   level:
-    org.springframework.web: INFO
+    org.springframework: INFO
     ru.unit_techno.qr_entry_control_impl: DEBUG
 
 ws:
