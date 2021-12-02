@@ -20,6 +20,7 @@ import ru.unit_techno.qr_entry_control_impl.exception.DeliverySendException;
 import ru.unit_techno.qr_entry_control_impl.mapper.QrMapper;
 import ru.unit_techno.qr_entry_control_impl.repository.QrRepository;
 import ru.unit_techno.qr_entry_control_impl.util.SpecUtils;
+import ru.unit_techno.qr_entry_control_impl.util.Constant;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -89,7 +90,7 @@ public class QrService {
         return new HashMap<>() {{
             put("surname", qrCodeForSave.getFullName() + "!");
             put("date", withCorrectYear);
-            put("pathToQr", "temp/" + qrPictureObject.getFilePath());
+            put("pathToQr", Constant.PATH_TO_QRS + qrPictureObject.getFilePath());
         }};
     }
 }

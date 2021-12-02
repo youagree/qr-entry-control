@@ -9,6 +9,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import ru.unit_techno.qr_entry_control_impl.util.Constant;
 
 @EntityScan(basePackages =
         {"ru.unit.techno.ariss.log.action.lib.entity",

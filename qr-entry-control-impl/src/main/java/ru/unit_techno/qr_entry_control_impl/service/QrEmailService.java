@@ -16,6 +16,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import ru.unit_techno.qr_entry_control_impl.dto.service.QrPictureObject;
 import ru.unit_techno.qr_entry_control_impl.entity.enums.DeliveryStatus;
 import ru.unit_techno.qr_entry_control_impl.repository.QrDeliveryEntityRepository;
+import ru.unit_techno.qr_entry_control_impl.util.Constant;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -57,7 +58,7 @@ public class QrEmailService implements EmailService {
 
     private void deleteSuccessSendingQr(String pathToDelete) {
         try {
-            boolean delete = new File("temp\\" + pathToDelete).delete();
+            boolean delete = new File(Constant.PATH_TO_QRS + pathToDelete).delete();
             if (delete) {
                 log.info("file {} success delete from temp", pathToDelete);
                 return;
@@ -77,10 +78,10 @@ public class QrEmailService implements EmailService {
         helper.setText(htmlBody, true);
 
         //add attach
-        helper.addAttachment("qr-code.png", new File("temp\\" + pathToQr));
+        helper.addAttachment("qr-code.png", new File(Constant.PATH_TO_QRS + pathToQr));
 
         //add image inside message
-        helper.addInline("qr-code-for-send.png", new FileSystemResource(new File("temp\\" + pathToQr)), "image/png");
+        helper.addInline("qr-code-for-send.png", new FileSystemResource(new File(Constant.PATH_TO_QRS + pathToQr)), "image/png");
         helper.addInline("logo.png", resourceFile);
         javaMailSender.send(message);
     }

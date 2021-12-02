@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.unit_techno.qr_entry_control_impl.dto.service.QrObjectTemplateDto;
 import ru.unit_techno.qr_entry_control_impl.dto.service.QrPictureObject;
+import ru.unit_techno.qr_entry_control_impl.util.Constant;
 
 import java.io.File;
 import java.nio.file.Paths;
@@ -30,7 +31,7 @@ public class QrGeneratorService {
     @Transactional
     public QrPictureObject generateQrPictureObject (QrObjectTemplateDto qrObjectDto) {
         createDirectoryIfNotExist();
-        String path = "temp/" + qrObjectDto.getFullName() + System.currentTimeMillis() + ".png";
+        String path = Constant.PATH_TO_QRS + qrObjectDto.getFullName() + System.currentTimeMillis() + ".png";
         String jsonObject = mapper.writeValueAsString(qrObjectDto);
 
         BitMatrix bitMatrix = new MultiFormatWriter().encode(jsonObject, BarcodeFormat.QR_CODE, 144, 144);
@@ -51,7 +52,7 @@ public class QrGeneratorService {
 
     private void createDirectoryIfNotExist() {
         log.debug("start creating directory");
-        File directory = new File("temp");
+        File directory = new File(Constant.QR_TEMP_DIR);
         if (!directory.exists()) {
             boolean mkdir = directory.mkdir();
             if (!mkdir) {
