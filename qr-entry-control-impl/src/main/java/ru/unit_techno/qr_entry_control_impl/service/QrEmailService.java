@@ -50,6 +50,7 @@ public class QrEmailService implements EmailService {
             qrDeliveryEntityRepository.updateStatus(qrPictureObject.getDeliveryEntityId(), DeliveryStatus.DELIVERED);
             return true;
         } catch (Exception e) {
+            log.error("Some error while sending email", e);
             messageStorageService.putNotDeliveryMessage(to, qrPictureObject);
             qrDeliveryEntityRepository.updateStatus(qrPictureObject.getDeliveryEntityId(), DeliveryStatus.NOT_DELIVERED);
             return false;
