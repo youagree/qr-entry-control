@@ -11,11 +11,7 @@ import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.unit_techno.qr_entry_control_impl.dto.InputQrFromFirmware;
 import ru.unit_techno.qr_entry_control_impl.dto.QrCodeDto;
 import ru.unit_techno.qr_entry_control_impl.dto.QrInfoDto;
@@ -43,11 +39,11 @@ public class QrController {
         qrValidationService.parseQrCodeMessage(inputQrFromFirmware, deviceId);
     }
 
-    @PostMapping("/allQrCodesInfo")
+    @GetMapping("/allQrCodesInfo")
     public Page<QrInfoDto> getQrCodesInfo(
             @And({@Spec(path = "qrId", params = "qrId", spec = Equal.class),
                     @Spec(path = "governmentNumber", params = "governmentNumber", spec = Equal.class),
-                    @Spec(path = "enteringDate", params = "enteringDate", spec = Equal.class, config = "yyyy-MM-dd"),
+                    @Spec(path = "enteringDate", params = {"before", "after"}, spec = Between.class, config = "yyyy-MM-dd"),
                     @Spec(path = "fullName", params = "fullName", spec = Like.class)
             }) Specification<QrCodeEntity> specificationPageable, Pageable pageable) {
         return qrService.getAllQrCodesInfo(specificationPageable, pageable);
