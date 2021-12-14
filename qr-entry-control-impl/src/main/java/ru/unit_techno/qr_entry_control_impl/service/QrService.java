@@ -19,8 +19,8 @@ import ru.unit_techno.qr_entry_control_impl.entity.enums.DeliveryStatus;
 import ru.unit_techno.qr_entry_control_impl.exception.DeliverySendException;
 import ru.unit_techno.qr_entry_control_impl.mapper.QrMapper;
 import ru.unit_techno.qr_entry_control_impl.repository.QrRepository;
-import ru.unit_techno.qr_entry_control_impl.util.SpecUtils;
 import ru.unit_techno.qr_entry_control_impl.util.Constant;
+import ru.unit_techno.qr_entry_control_impl.util.SpecUtils;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -77,7 +77,7 @@ public class QrService {
         Page<QrCodeEntity> allQrCodes = qrRepository.findAll(specification, pageable);
         return new PageImpl<>(allQrCodes.stream()
                 .map(qrMapper::entityToInfo)
-                .collect(Collectors.toList()), pageable, allQrCodes.getTotalPages());
+                .collect(Collectors.toList()), pageable, allQrCodes.getTotalElements());
     }
 
     private HashMap<String, Object> buildMetadataForMessage(QrPictureObject qrPictureObject, QrCodeEntity qrCodeForSave) {

@@ -57,6 +57,7 @@ public class MessageScheduler {
                 .map(QrDeliveryEntity::getId)
                 .collect(Collectors.toList());
         qrDeliveryEntityRepository.updateStatuses(forUpdateStatuses, DeliveryStatus.DELIVERED);
+        //todo невалидный лог
         log.info("Message has been resent and complete successful");
     }
 }
