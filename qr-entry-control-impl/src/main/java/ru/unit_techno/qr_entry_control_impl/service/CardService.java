@@ -36,6 +36,7 @@ public class CardService {
     private final EntryDeviceToReqRespMapper reqRespMapper;
     private final LogActionBuilder logActionBuilder;
     private final WSNotificationService notificationService;
+    private final BarrierFeignService barrierFeignService;
 
     @SneakyThrows
     @Transactional
@@ -61,13 +62,13 @@ public class CardService {
         try {
             DeviceResponseDto entryDevice = deviceResource.getGroupDevices(deviceId, DeviceType.CARD);
             BarrierRequestDto barrierRequest = reqRespMapper.entryDeviceToRequest(entryDevice);
-            BarrierResponseDto barrierResponse = barrierFeignClient.openBarrier(barrierRequest);
+            barrierFeignService.openBarrier(barrierRequest, qrCodeEntity);
 
             //после присвоения null у qr, карточка удаляется автоматически
             qrCodeEntity.setCard(null);
             qrRepository.save(qrCodeEntity);
 
-            logActionBuilder.buildActionObjectAndLogAction(barrierResponse.getBarrierId(),
+            logActionBuilder.buildActionObjectAndLogAction(barrierRequest.getBarrierId(),
                     qrCodeEntity.getQrId(),
                     qrCodeEntity.getGovernmentNumber(),
                     ActionStatus.UNKNOWN);
@@ -82,6 +83,7 @@ public class CardService {
                     new Description()
                             .setErroredServiceName("QR")
                             .setMessage("Some problems while returning card in column. Error message: " + e.getMessage()));
+            /// TODO: 20.12.2021 Нужно сделать отдельный рест вызов прошивки, чтобы вернуть карту в случае если шлагбаум не открылся RELEASE 1.0
         }
     }
 }

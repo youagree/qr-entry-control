@@ -33,4 +33,13 @@ public class WSNotificationService {
                         .setGovernmentNumber("Номер автомобиля: " + governmentNumber)
         );
     }
+
+    public void openBarrierError(String governmentNumber) {
+        brokerMessagingTemplate.convertAndSend(
+                eventsTopic,
+                new CardReturnEvent()
+                        .setMessage("Ошибка открытия шлагбаума при возвращении карты!")
+                        .setGovernmentNumber("Номер автомобиля: " + governmentNumber)
+        );
+    }
 }

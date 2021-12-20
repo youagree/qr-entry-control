@@ -60,3 +60,12 @@ eureka:
       defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
   instance:
     preferIpAddress: true
+
+event:
+  type:
+    1239:
+      info: "административный корпус"
+      entryType: OUT
+    2345:
+      info: "задний проход"
+      entryType: IN
