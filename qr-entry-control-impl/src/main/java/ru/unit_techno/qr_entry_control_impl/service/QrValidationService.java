@@ -34,6 +34,7 @@ public class QrValidationService {
     private final QrRepository repository;
     private final DeviceResource deviceResource;
     private final BarrierFeignClient barrierFeignClient;
+    private final BarrierFeignService barrierFeignService;
     private final EntryDeviceToReqRespMapper reqRespMapper;
     private final LogActionBuilder logActionBuilder;
     private final WSNotificationService notificationService;
@@ -64,12 +65,7 @@ public class QrValidationService {
 
             DeviceResponseDto entryDevice = deviceResource.getGroupDevices(deviceId, DeviceType.QR);
             BarrierRequestDto barrierRequest = reqRespMapper.entryDeviceToRequest(entryDevice);
-            BarrierResponseDto barrierResponse = barrierFeignClient.openBarrier(barrierRequest);
-
-            logActionBuilder.buildActionObjectAndLogAction(barrierResponse.getBarrierId(),
-                    qrCodeEnt.getQrId(),
-                    qrCodeEnt.getGovernmentNumber(),
-                    ActionStatus.UNKNOWN);
+            barrierFeignService.openBarrier(barrierRequest, qrCodeEnt);
 
             repository.save(qrCodeEnt);
             log.info("qr codie is {}", qrCodeEnt);
