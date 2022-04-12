@@ -26,4 +26,10 @@ public class MainExceptionHandler {
         log.error("invalid input argument {}", ex.getMessage());
         return new ExceptionHandleDto().setStatusCode(400).setMessage(ex.getMessage());
     }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(Exception.class)
+    public void handleAllException() {
+        log.error("failed when in process delivery");
+    }
 }

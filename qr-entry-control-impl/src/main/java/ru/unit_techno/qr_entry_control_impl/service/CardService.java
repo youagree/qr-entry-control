@@ -4,9 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.unit.techno.ariss.barrier.api.BarrierFeignClient;
 import ru.unit.techno.ariss.barrier.api.dto.BarrierRequestDto;
-import ru.unit.techno.ariss.barrier.api.dto.BarrierResponseDto;
 import ru.unit.techno.ariss.log.action.lib.api.LogActionBuilder;
 import ru.unit.techno.ariss.log.action.lib.entity.Description;
 import ru.unit.techno.ariss.log.action.lib.model.ActionStatus;
@@ -19,8 +17,8 @@ import ru.unit_techno.qr_entry_control_impl.entity.enums.CardStatus;
 import ru.unit_techno.qr_entry_control_impl.mapper.EntryDeviceToReqRespMapper;
 import ru.unit_techno.qr_entry_control_impl.repository.CardRepository;
 import ru.unit_techno.qr_entry_control_impl.repository.QrRepository;
-import ru.unit_techno.qr_entry_control_impl.websocket.WSNotificationService;
 import ru.unit_techno.qr_entry_control_impl.util.DateValidator;
+import ru.unit_techno.qr_entry_control_impl.websocket.WSNotificationService;
 
 import javax.persistence.EntityNotFoundException;
 import java.util.Optional;
@@ -32,7 +30,6 @@ public class CardService {
     private final QrRepository qrRepository;
     private final CardRepository cardRepository;
     private final DeviceResource deviceResource;
-    private final BarrierFeignClient barrierFeignClient;
     private final EntryDeviceToReqRespMapper reqRespMapper;
     private final LogActionBuilder logActionBuilder;
     private final WSNotificationService notificationService;

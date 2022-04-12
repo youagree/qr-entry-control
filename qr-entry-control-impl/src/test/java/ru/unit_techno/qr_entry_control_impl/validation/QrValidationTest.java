@@ -40,7 +40,7 @@ public class QrValidationTest extends BaseTestClass {
     @Autowired
     private QrValidationService qrValidationService;
 
-    public static final String BASE_URL = "/ui/qr";
+    public static final String BASE_URL = "/api/qr";
 
     @SneakyThrows
     @Test
@@ -48,10 +48,10 @@ public class QrValidationTest extends BaseTestClass {
     public void receiveQrMessageTest() {
         UUID uuid = UUID.randomUUID();
         Mockito.when(deviceResource.getGroupDevices(7765L, DeviceType.QR))
-                .thenReturn(new DeviceResponseDto().setEntryAddress("unknown").setDeviceId(1239L).setType("ENTRY"));
+                .thenReturn(new DeviceResponseDto().setEntryAddress("localhost:1080").setDeviceId(1239L).setType("ENTRY"));
 
         BarrierRequestDto barrierRequestDto = reqRespMapper.entryDeviceToRequest(new DeviceResponseDto()
-                .setEntryAddress("unknown")
+                .setEntryAddress("localhost:1080")
                 .setDeviceId(1239L)
                 .setType("ENTRY"));
 
@@ -84,11 +84,9 @@ public class QrValidationTest extends BaseTestClass {
         Assertions.assertEquals(all.size(), 1);
 
         CardEntity cardEntity = all.get(0);
-        Assertions.assertEquals(cardEntity.getCardValue(), "return value from firmware");
+        Assertions.assertNotNull(cardEntity.getCardValue());
         Assertions.assertEquals(cardEntity.getCardStatus(), CardStatus.ISSUED);
         Assertions.assertNotNull(cardEntity.getQrCodeEntity());
-
-
         /// TODO: 24.09.2021 Добавить ассерты на эвенты
     }
 

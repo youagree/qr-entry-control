@@ -11,7 +11,7 @@ import ru.unit_techno.qr_entry_control_impl.dto.QrCodeDto;
 import java.time.LocalDate;
 
 @DirtiesContext
-public class QrControllerTest extends BaseTestClass {
+public class QrControllerExternalTest extends BaseTestClass {
 
     public static final String BASE_URL = "/ui/qr";
 

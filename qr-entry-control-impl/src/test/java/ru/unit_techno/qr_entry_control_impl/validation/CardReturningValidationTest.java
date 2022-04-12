@@ -27,7 +27,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-public class CardReturningValidation extends BaseTestClass {
+public class CardReturningValidationTest extends BaseTestClass {
 
     @MockBean
     private DeviceResource deviceResource;
@@ -38,7 +38,8 @@ public class CardReturningValidation extends BaseTestClass {
     @Autowired
     private CardService cardService;
 
-    public static final String BASE_URL = "/api/card";
+    public static final String BASE_URL_QR = "/api/qr/";
+    public static final String BASE_URL_CARD = "/api/card/";
 
     @Test
     @DisplayName("Сдача карты, позитивный кейс")
@@ -78,7 +79,7 @@ public class CardReturningValidation extends BaseTestClass {
 
         QrCodeEntity qrCode = qrRepository.save(qrCodeEntity);
 
-        String resultUrl = BASE_URL + "/return/" + "тупорылый?deviceId=9999";
+        String resultUrl = BASE_URL_CARD + "/return/" + "тупорылый?deviceId=9999";
 
         testUtils.invokePostApi(Void.class, resultUrl, HttpStatus.OK, null);
 
