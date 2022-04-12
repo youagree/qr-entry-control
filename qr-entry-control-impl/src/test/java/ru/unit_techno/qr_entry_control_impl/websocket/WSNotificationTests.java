@@ -57,7 +57,7 @@ public class WSNotificationTests extends BaseTestClass {
 
         notificationService.sendQrErrorScan("А777АА77");
 
-        String receivedMessage = blockingQueue.poll(1, SECONDS);
+        String receivedMessage = blockingQueue.poll(10, SECONDS);
         QrScanEvent result = objectMapper.readValue(receivedMessage, QrScanEvent.class);
         Assertions.assertEquals(result.getGovernmentNumber(), "Номер автомобиля: А777АА77");
         Assertions.assertEquals(result.getMessage(), "Данный QR код не найден в системе");

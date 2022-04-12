@@ -37,13 +37,13 @@ public class QrValidationService {
     private final EntryDeviceToReqRespMapper reqRespMapper;
     private final LogActionBuilder logActionBuilder;
     private final WSNotificationService notificationService;
+    private final HttpClientQr httpClientQr;
 
     @SneakyThrows
     @Transactional
     public void parseQrCodeMessage(InputQrFromFirmware inputQrFromFirmware, Long deviceId) {
         Optional<QrCodeEntity> qrObj = repository.findByUuid(UUID.fromString(inputQrFromFirmware.getUUID()));
 
-        //TODO проверять дату въезда, если вдруг человек заказал на завтра,приехал сегодня
         if (qrObj.isPresent()) {
             QrCodeEntity qrCodeEnt = qrObj.get();
             if (qrCodeEnt.getExpire()) {
@@ -52,12 +52,11 @@ public class QrValidationService {
 
             DateValidator.checkQrEnteringDate(qrCodeEnt);
 
-            //todo выдача карточки КАК В АЭРОПОРТУ и открытие шлагбаума(вызов прошивки) и получение номера карты
-            /// TODO: 07.10.2021 Добавить функционал запроса прошивки
+            DeviceResponseDto cardColumn = deviceResource.getGroupDevices(deviceId, DeviceType.CARD);
 
             qrCodeEnt.addCard(
                     new CardEntity()
-                            .setCardValue("return value from firmware")
+                            .setCardValue(httpClientQr.requestToGiveCard(cardColumn))
                             .setCardStatus(CardStatus.ISSUED)
             );
             qrCodeEnt.setExpire(true);
