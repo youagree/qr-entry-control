@@ -33,7 +33,6 @@ public class QrValidationService {
 
     private final QrRepository repository;
     private final DeviceResource deviceResource;
-    private final BarrierFeignClient barrierFeignClient;
     private final BarrierFeignService barrierFeignService;
     private final EntryDeviceToReqRespMapper reqRespMapper;
     private final LogActionBuilder logActionBuilder;
