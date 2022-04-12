@@ -1,7 +1,7 @@
 <?xml version="1.1" encoding="UTF-8"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/">
 
     <include file="db/changelog_1/init_schema-1.xml" relativeToChangelogFile="true"/>
     <include file="changelog_action_lib.xml" relativeToChangelogFile="true"/>
