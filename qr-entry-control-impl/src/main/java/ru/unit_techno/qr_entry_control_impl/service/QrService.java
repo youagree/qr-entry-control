@@ -81,7 +81,7 @@ public class QrService {
     }
 
     private HashMap<String, Object> buildMetadataForMessage(QrPictureObject qrPictureObject, QrCodeEntity qrCodeForSave) {
-        LocalDate enteringDate = qrCodeForSave.getEnteringDate();
+        LocalDate enteringDate = LocalDate.from(qrCodeForSave.getEnteringDate());
         String resultDate =
                 DateTimeFormatter.ofLocalizedDate(FormatStyle.LONG)
                         .withLocale(new Locale("ru"))

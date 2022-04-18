@@ -10,6 +10,7 @@ import ru.unit_techno.qr_entry_control_impl.entity.enums.DeliveryStatus;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @UtilityClass
@@ -24,7 +25,7 @@ public class ObjectTestGenerator {
                 .setEmail("as@ya.ru")
                 .setExpire(false)
                 .setUuid(UUID.randomUUID())
-                .setEnteringDate(LocalDate.now().plusDays(1L))
+                .setEnteringDate(LocalDateTime.now().plusDays(1L))
                 .setQrDeliveryEntity(getQrDeliveryEntity());
         qrCodeEntity.addCard(getCard());
         return qrCodeEntity;

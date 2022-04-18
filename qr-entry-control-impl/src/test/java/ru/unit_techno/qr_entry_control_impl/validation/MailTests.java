@@ -13,6 +13,7 @@ import ru.unit_techno.qr_entry_control_impl.dto.QrCodeDto;
 
 import javax.mail.internet.MimeMessage;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class MailTests extends BaseTestClass {
     String BASE_URL = "/ui/qr";
@@ -36,7 +37,7 @@ public class MailTests extends BaseTestClass {
                 .setEmail("pavsoldatov96@gmail.com")
                 .setFullName("aa")
                 .setGovernmentNumber("А777АА77")
-                .setEnteringDate(LocalDate.of(2031, 11, 11));
+                .setEnteringDate(LocalDateTime.of(2031, 11, 11, 0, 0, 0));
 
         String resultUrl = BASE_URL + "/createAndSend";
 

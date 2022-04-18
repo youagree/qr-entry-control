@@ -11,6 +11,7 @@ import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 public class QrCodeDto {
@@ -25,5 +26,5 @@ public class QrCodeDto {
     @NotNull
     @FutureOrPresent(message = "время не может быть передано в прошлом времени")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private LocalDate enteringDate;
+    private LocalDateTime enteringDate;
 }

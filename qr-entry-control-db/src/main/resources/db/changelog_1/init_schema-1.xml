@@ -28,7 +28,7 @@
             </column>
             <column name="qr_picture" type="VARCHAR"/>
             <column name="creation_date" type="TIMESTAMP"/>
-            <column name="entering_date" type="DATE"/>
+            <column name="entering_date" type="TIMESTAMP"/>
             <column name="government_number" type="VARCHAR"/>
             <column name="full_name" type="VARCHAR"/>
             <column name="email" type="VARCHAR"/>
