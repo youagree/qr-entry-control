@@ -29,7 +29,8 @@ public class MainExceptionHandler {
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
-    public void handleAllException() {
+    public String handleAllException(Exception ex) {
         log.error("failed when in process delivery");
+        return ex.getMessage();
     }
 }

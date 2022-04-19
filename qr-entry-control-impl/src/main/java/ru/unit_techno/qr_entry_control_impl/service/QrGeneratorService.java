@@ -17,6 +17,7 @@ import ru.unit_techno.qr_entry_control_impl.dto.service.QrPictureObject;
 import ru.unit_techno.qr_entry_control_impl.util.Constant;
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.Base64;
 
@@ -33,8 +34,9 @@ public class QrGeneratorService {
         createDirectoryIfNotExist();
         String path = Constant.PATH_TO_QRS + qrObjectDto.getFullName().replace(" ", "") + System.currentTimeMillis() + ".png";
         String jsonObject = mapper.writeValueAsString(qrObjectDto);
+        String base64 = Base64.getEncoder().encodeToString(jsonObject.getBytes(StandardCharsets.UTF_8));
 
-        BitMatrix bitMatrix = new MultiFormatWriter().encode(jsonObject, BarcodeFormat.QR_CODE, 144, 144);
+        BitMatrix bitMatrix = new MultiFormatWriter().encode(base64, BarcodeFormat.QR_CODE, 144, 144);
         MatrixToImageWriter.writeToPath(bitMatrix, "png", Paths.get(path));
 
         File qrPictureFile = new File(path);

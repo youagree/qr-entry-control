@@ -71,14 +71,14 @@ public class QrValidationService {
             notificationService.sendQrErrorScan(inputQrFromFirmware.getGovernmentNumber());
             logActionBuilder.buildActionObjectAndLogAction(deviceId,
                     //fixme есть риск записать не то, либо npe
-                    qrObj.get().getQrId(),
+                    //подумать над тем что передавать, так как в этом кейсе никогда не будет айдишника qr
+                    0L,
                     inputQrFromFirmware.getGovernmentNumber(),
-                    null,
+                    ActionStatus.UNKNOWN,
                     true,
                     new Description()
                             .setErroredServiceName("QR")
                             .setMessage("We are no have this QR code in database. Try generate QR code on our website!"));
-            throw new Exception("We are no have this QR code in database. Try generate QR code on our website!");
         }
     }
 }
