@@ -14,7 +14,6 @@ import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
 @Data
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class QrCodeDto {
 
     @Email
