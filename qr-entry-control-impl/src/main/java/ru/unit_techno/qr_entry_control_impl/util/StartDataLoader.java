@@ -30,27 +30,27 @@ public class StartDataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        eventRepository.deleteAll();
-        repository.flush();
-        qrDeliveryEntityRepository.deleteAll();
-        qrDeliveryEntityRepository.flush();
-        qrRepository.deleteAll();
-        qrRepository.flush();
-
-        Resource resource = new ClassPathResource("test-data-events.sql");
-        ResourceDatabasePopulator populator = new ResourceDatabasePopulator(resource);
-        populator.setSqlScriptEncoding("UTF-8");
-        populator.execute(Objects.requireNonNull(jdbcTemplate.getDataSource()));
-
-        Resource resource1 = new ClassPathResource("test-data-delivery.sql");
-        ResourceDatabasePopulator populator1 = new ResourceDatabasePopulator(resource1);
-        populator1.setSqlScriptEncoding("UTF-8");
-        populator1.execute(Objects.requireNonNull(jdbcTemplate.getDataSource()));
-
-        Resource resource2 = new ClassPathResource("test-data-qr.sql");
-        ResourceDatabasePopulator populator2 = new ResourceDatabasePopulator(resource2);
-        populator2.setSqlScriptEncoding("UTF-8");
-        populator2.execute(Objects.requireNonNull(jdbcTemplate.getDataSource()));
-        log.info("Start data uploaded!");
+//        eventRepository.deleteAll();
+//        repository.flush();
+//        qrDeliveryEntityRepository.deleteAll();
+//        qrDeliveryEntityRepository.flush();
+//        qrRepository.deleteAll();
+//        qrRepository.flush();
+//
+//        Resource resource = new ClassPathResource("test-data-events.sql");
+//        ResourceDatabasePopulator populator = new ResourceDatabasePopulator(resource);
+//        populator.setSqlScriptEncoding("UTF-8");
+//        populator.execute(Objects.requireNonNull(jdbcTemplate.getDataSource()));
+//
+//        Resource resource1 = new ClassPathResource("test-data-delivery.sql");
+//        ResourceDatabasePopulator populator1 = new ResourceDatabasePopulator(resource1);
+//        populator1.setSqlScriptEncoding("UTF-8");
+//        populator1.execute(Objects.requireNonNull(jdbcTemplate.getDataSource()));
+//
+//        Resource resource2 = new ClassPathResource("test-data-qr.sql");
+//        ResourceDatabasePopulator populator2 = new ResourceDatabasePopulator(resource2);
+//        populator2.setSqlScriptEncoding("UTF-8");
+//        populator2.execute(Objects.requireNonNull(jdbcTemplate.getDataSource()));
+//        log.info("Start data uploaded!");
     }
 }

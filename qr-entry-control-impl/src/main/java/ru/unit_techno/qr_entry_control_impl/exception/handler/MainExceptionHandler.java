@@ -31,6 +31,7 @@ public class MainExceptionHandler {
     @ExceptionHandler(Exception.class)
     public String handleAllException(Exception ex) {
         log.error("failed when in process delivery");
+        ex.printStackTrace();
         return ex.getMessage();
     }
 }
