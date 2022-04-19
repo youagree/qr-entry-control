@@ -4,8 +4,7 @@ package ru.unit_techno.qr_entry_control_impl.dto;
 import static ru.unit_techno.qr_entry_control_impl.util.Constant.REGEX;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
@@ -15,6 +14,7 @@ import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class QrCodeDto {
 
     @Email
