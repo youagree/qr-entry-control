@@ -55,6 +55,7 @@ public class QrService {
         qrCodeForSave.setQrDeliveryEntity(new QrDeliveryEntity()
                 .setDeliveryStatus(DeliveryStatus.NOT_DELIVERED)
         );
+        qrCodeForSave.setUuid(UUID.fromString(qrObjectTemplateDto.getUuid()));
         QrCodeEntity save = qrRepository.save(qrCodeForSave);
 
         Long deliveryId = save.getQrDeliveryEntity().getId();

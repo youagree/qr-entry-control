@@ -42,6 +42,7 @@ public class QrValidationService {
     @SneakyThrows
     @Transactional
     public void parseQrCodeMessage(InputQrFromFirmware inputQrFromFirmware, Long deviceId) {
+        log.info("input params {}, deviceId {}", inputQrFromFirmware, deviceId);
         Optional<QrCodeEntity> qrObj = repository.findByUuid(UUID.fromString(inputQrFromFirmware.getUUID()));
 
         if (qrObj.isPresent()) {
