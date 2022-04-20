@@ -1,16 +1,11 @@
 package ru.unit_techno.qr_entry_control_impl.service;
 
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.unit.techno.ariss.barrier.api.BarrierFeignClient;
 import ru.unit.techno.ariss.barrier.api.dto.BarrierRequestDto;
-import ru.unit.techno.ariss.barrier.api.dto.BarrierResponseDto;
-import ru.unit.techno.ariss.log.action.lib.api.LogActionBuilder;
-import ru.unit.techno.ariss.log.action.lib.entity.Description;
-import ru.unit.techno.ariss.log.action.lib.model.ActionStatus;
 import ru.unit.techno.device.registration.api.DeviceResource;
 import ru.unit.techno.device.registration.api.dto.DeviceResponseDto;
 import ru.unit.techno.device.registration.api.enums.DeviceType;
@@ -18,10 +13,12 @@ import ru.unit_techno.qr_entry_control_impl.dto.InputQrFromFirmware;
 import ru.unit_techno.qr_entry_control_impl.entity.CardEntity;
 import ru.unit_techno.qr_entry_control_impl.entity.QrCodeEntity;
 import ru.unit_techno.qr_entry_control_impl.entity.enums.CardStatus;
+import ru.unit_techno.qr_entry_control_impl.exception.CardServiceException;
+import ru.unit_techno.qr_entry_control_impl.exception.QrExpireException;
+import ru.unit_techno.qr_entry_control_impl.exception.QrNotFoundException;
 import ru.unit_techno.qr_entry_control_impl.mapper.EntryDeviceToReqRespMapper;
 import ru.unit_techno.qr_entry_control_impl.repository.QrRepository;
 import ru.unit_techno.qr_entry_control_impl.util.DateValidator;
-import ru.unit_techno.qr_entry_control_impl.websocket.WSNotificationService;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -35,51 +32,47 @@ public class QrValidationService {
     private final DeviceResource deviceResource;
     private final BarrierFeignService barrierFeignService;
     private final EntryDeviceToReqRespMapper reqRespMapper;
-    private final LogActionBuilder logActionBuilder;
-    private final WSNotificationService notificationService;
     private final HttpClientQr httpClientQr;
+    private final QrEventService qrEventService;
 
-    @SneakyThrows
     @Transactional
     public void parseQrCodeMessage(InputQrFromFirmware inputQrFromFirmware, Long deviceId) {
         log.info("input params {}, deviceId {}", inputQrFromFirmware, deviceId);
-        Optional<QrCodeEntity> qrObj = repository.findByUuid(UUID.fromString(inputQrFromFirmware.getUUID()));
+        QrCodeEntity qrCodeEnt = null;
+        try {
+            qrCodeEnt = repository.findByUuid(UUID.fromString(inputQrFromFirmware.getUUID()))
+                    .orElseThrow(() -> new QrNotFoundException("qr not found in database"));
+                if (qrCodeEnt.getExpire()) {
+                    throw new QrExpireException("QR code has expired! Try generate new QR code and use it! Expire date: "
+                            + qrCodeEnt.getExpire().toString());
+                }
 
-        if (qrObj.isPresent()) {
-            QrCodeEntity qrCodeEnt = qrObj.get();
-            if (qrCodeEnt.getExpire()) {
-                throw new Exception("QR code has expired! Try generate new QR code and use it! Expire date: " + qrCodeEnt.getExpire().toString());
-            }
+                DateValidator.checkQrEnteringDate(qrCodeEnt);
 
-            DateValidator.checkQrEnteringDate(qrCodeEnt);
+                DeviceResponseDto cardColumn = deviceResource.getGroupDevices(deviceId, DeviceType.CARD);
 
-            DeviceResponseDto cardColumn = deviceResource.getGroupDevices(deviceId, DeviceType.CARD);
+                qrCodeEnt.addCard(
+                        new CardEntity()
+                                .setCardValue(httpClientQr.requestToGiveCard(cardColumn))
+                                .setCardStatus(CardStatus.ISSUED)
+                );
+                qrCodeEnt.setExpire(true);
 
-            qrCodeEnt.addCard(
-                    new CardEntity()
-                            .setCardValue(httpClientQr.requestToGiveCard(cardColumn))
-                            .setCardStatus(CardStatus.ISSUED)
-            );
-            qrCodeEnt.setExpire(true);
+                DeviceResponseDto entryDevice = deviceResource.getGroupDevices(deviceId, DeviceType.QR);
+                BarrierRequestDto barrierRequest = reqRespMapper.entryDeviceToRequest(entryDevice);
+                barrierFeignService.openBarrier(barrierRequest, qrCodeEnt);
 
-            DeviceResponseDto entryDevice = deviceResource.getGroupDevices(deviceId, DeviceType.QR);
-            BarrierRequestDto barrierRequest = reqRespMapper.entryDeviceToRequest(entryDevice);
-            barrierFeignService.openBarrier(barrierRequest, qrCodeEnt);
-
-            repository.save(qrCodeEnt);
-            log.info("qr codie is {}", qrCodeEnt);
-        } else {
-            notificationService.sendQrErrorScan(inputQrFromFirmware.getGovernmentNumber());
-            logActionBuilder.buildActionObjectAndLogAction(deviceId,
-                    //fixme есть риск записать не то, либо npe
-                    //подумать над тем что передавать, так как в этом кейсе никогда не будет айдишника qr
-                    0L,
-                    inputQrFromFirmware.getGovernmentNumber(),
-                    ActionStatus.UNKNOWN,
-                    true,
-                    new Description()
-                            .setErroredServiceName("QR")
-                            .setMessage("We are no have this QR code in database. Try generate QR code on our website!"));
+                repository.save(qrCodeEnt);
+                log.info("qr codie is {}", qrCodeEnt);
+        } catch (CardServiceException | QrExpireException | FeignException e) {
+            log.error("error is: {}", e.getMessage());
+            qrEventService.logEventAndSendNotification(inputQrFromFirmware, deviceId,
+                    Optional.ofNullable(qrCodeEnt).map(QrCodeEntity::getQrId).orElse(null));
+            throw e;
+        } catch (QrNotFoundException e) {
+            log.error("error is: {}", e.getMessage());
+            qrEventService.logEventAndSendNotification(inputQrFromFirmware, deviceId, null);
+            throw e;
         }
     }
 }

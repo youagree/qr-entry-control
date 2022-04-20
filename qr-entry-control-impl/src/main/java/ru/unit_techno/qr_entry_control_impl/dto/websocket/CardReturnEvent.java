@@ -7,4 +7,5 @@ public class CardReturnEvent {
 
     private String governmentNumber;
     private String message;
+    private Long deviceId = null;
 }

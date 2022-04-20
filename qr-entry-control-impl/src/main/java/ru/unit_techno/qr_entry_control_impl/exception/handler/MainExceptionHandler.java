@@ -1,6 +1,7 @@
 
 package ru.unit_techno.qr_entry_control_impl.exception.handler;
 
+import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -8,7 +9,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.unit_techno.qr_entry_control_impl.dto.ExceptionHandleDto;
+import ru.unit_techno.qr_entry_control_impl.exception.CardServiceException;
 import ru.unit_techno.qr_entry_control_impl.exception.DeliverySendException;
+import ru.unit_techno.qr_entry_control_impl.exception.QrExpireException;
+import ru.unit_techno.qr_entry_control_impl.exception.QrNotFoundException;
 
 @Slf4j
 @RestControllerAdvice
@@ -30,6 +34,22 @@ public class MainExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public String handleAllException(Exception ex) {
+        log.error("failed when in process delivery");
+        ex.printStackTrace();
+        return ex.getMessage();
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(QrNotFoundException.class)
+    public String qrNoFound(Exception ex) {
+        log.error("failed when in process delivery");
+        ex.printStackTrace();
+        return ex.getMessage();
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(value = {QrExpireException.class, FeignException.class, CardServiceException.class})
+    public String negativeCasesWhenReceiveQr(Exception ex) {
         log.error("failed when in process delivery");
         ex.printStackTrace();
         return ex.getMessage();

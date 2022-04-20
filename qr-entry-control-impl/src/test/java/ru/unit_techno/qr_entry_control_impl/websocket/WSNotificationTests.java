@@ -55,7 +55,7 @@ public class WSNotificationTests extends BaseTestClass {
                 .get(1, SECONDS);
         session.subscribe("/qr-entry-control/events", new DefaultStompFrameHandler());
 
-        notificationService.sendQrErrorScan("А777АА77");
+        notificationService.sendQrErrorScan("А777АА77", 0L);
 
         String receivedMessage = blockingQueue.poll(10, SECONDS);
         QrScanEvent result = objectMapper.readValue(receivedMessage, QrScanEvent.class);
@@ -71,7 +71,7 @@ public class WSNotificationTests extends BaseTestClass {
                 .get(1, SECONDS);
         session.subscribe("/qr-entry-control/events", new DefaultStompFrameHandler());
 
-        notificationService.sendCardNotReturned("А777АА77");
+        notificationService.sendCardNotReturned("А777АА77", 0L);
 
         String receivedMessage = blockingQueue.poll(1, SECONDS);
         CardReturnEvent result = objectMapper.readValue(receivedMessage, CardReturnEvent.class);

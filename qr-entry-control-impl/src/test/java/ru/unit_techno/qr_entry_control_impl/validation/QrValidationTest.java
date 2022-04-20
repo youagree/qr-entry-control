@@ -21,6 +21,7 @@ import ru.unit_techno.qr_entry_control_impl.entity.QrCodeEntity;
 import ru.unit_techno.qr_entry_control_impl.entity.QrDeliveryEntity;
 import ru.unit_techno.qr_entry_control_impl.entity.enums.CardStatus;
 import ru.unit_techno.qr_entry_control_impl.entity.enums.DeliveryStatus;
+import ru.unit_techno.qr_entry_control_impl.exception.QrExpireException;
 import ru.unit_techno.qr_entry_control_impl.service.QrValidationService;
 
 import java.sql.Timestamp;
@@ -124,7 +125,7 @@ public class QrValidationTest extends BaseTestClass {
                 .setUUID(String.valueOf(uuid))
                 .setGovernmentNumber("А777АА 77");
 
-        Assertions.assertThrows(RuntimeException.class, () -> {
+        Assertions.assertThrows(QrExpireException.class, () -> {
             qrValidationService.parseQrCodeMessage(inputQrFromFirmware, 7765L);
         });
     }

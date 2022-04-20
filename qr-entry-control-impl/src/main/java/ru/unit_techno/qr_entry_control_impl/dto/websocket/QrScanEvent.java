@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class QrScanEvent {
-
     private String governmentNumber;
     private String message;
+    private Long deviceId = null;
 }

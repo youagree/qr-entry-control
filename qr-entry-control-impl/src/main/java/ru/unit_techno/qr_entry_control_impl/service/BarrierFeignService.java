@@ -25,6 +25,7 @@ public class BarrierFeignService {
     private final BarrierFeignClient barrierFeignClient;
     private final WSNotificationService notificationService;
     private final LogActionBuilder logActionBuilder;
+    private final QrEventService qrEventService;
 
     @Async
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -36,7 +37,8 @@ public class BarrierFeignService {
                     qrCodeEntity.getGovernmentNumber(),
                     ActionStatus.UNKNOWN);
         } catch (FeignException e) {
-            notificationService.openBarrierError(qrCodeEntity.getGovernmentNumber());
+            // todo switch to qrEventService
+            notificationService.openBarrierError(qrCodeEntity.getGovernmentNumber(), barrierRequestDto.getBarrierId());
             log.error("Service not available", e);
             logActionBuilder.buildActionObjectAndLogAction(barrierRequestDto.getBarrierId(),
                     qrCodeEntity.getQrId(),

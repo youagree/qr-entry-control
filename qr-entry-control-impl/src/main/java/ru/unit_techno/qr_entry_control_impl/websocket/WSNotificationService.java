@@ -16,30 +16,33 @@ public class WSNotificationService {
     @Value("${ws.topics.name}")
     private String eventsTopic;
 
-    public void sendCardNotReturned(String governmentNumber) {
+    public void sendCardNotReturned(String governmentNumber, Long deviceId) {
         brokerMessagingTemplate.convertAndSend(
                 eventsTopic,
                 new CardReturnEvent()
                         .setMessage("Не удалось зафиксировать возврат карточки")
                         .setGovernmentNumber("Номер автомобиля: " + governmentNumber)
+                        .setDeviceId(deviceId)
         );
     }
 
-    public void sendQrErrorScan(String governmentNumber) {
+    public void sendQrErrorScan(String governmentNumber, Long deviceId) {
         brokerMessagingTemplate.convertAndSend(
                 eventsTopic,
                 new QrScanEvent()
                         .setMessage("Данный QR код не найден в системе")
                         .setGovernmentNumber("Номер автомобиля: " + governmentNumber)
+                        .setDeviceId(deviceId)
         );
     }
 
-    public void openBarrierError(String governmentNumber) {
+    public void openBarrierError(String governmentNumber, Long deviceId) {
         brokerMessagingTemplate.convertAndSend(
                 eventsTopic,
                 new CardReturnEvent()
                         .setMessage("Ошибка открытия шлагбаума при возвращении карты!")
                         .setGovernmentNumber("Номер автомобиля: " + governmentNumber)
+                        .setDeviceId(deviceId)
         );
     }
 }

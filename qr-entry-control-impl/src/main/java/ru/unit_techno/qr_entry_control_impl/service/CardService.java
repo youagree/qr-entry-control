@@ -71,7 +71,7 @@ public class CardService {
                     ActionStatus.UNKNOWN);
         } catch (Exception e) {
             /// TODO: 27.09.2021 Продумать возможные кейсы ошибок и эксепшенов, сделать обработки
-            notificationService.sendCardNotReturned(qrCodeEntity.getGovernmentNumber());
+            notificationService.sendCardNotReturned(qrCodeEntity.getGovernmentNumber(), deviceId);
             logActionBuilder.buildActionObjectAndLogAction(deviceId,
                     qrCodeEntity.getQrId(),
                     qrCodeEntity.getGovernmentNumber(),
