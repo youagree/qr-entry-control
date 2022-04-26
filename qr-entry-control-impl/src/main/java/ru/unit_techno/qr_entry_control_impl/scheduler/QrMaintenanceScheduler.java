@@ -1,22 +1,17 @@
 package ru.unit_techno.qr_entry_control_impl.scheduler;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.unit_techno.qr_entry_control_impl.repository.QrRepository;
 
-@Component
+//@Component
 @Slf4j
+@RequiredArgsConstructor
 public class QrMaintenanceScheduler {
 
-    private QrRepository qrRepository;
-
-    @Autowired
-    public QrMaintenanceScheduler(QrRepository qrRepository) {
-        this.qrRepository = qrRepository;
-    }
+    private final QrRepository qrRepository;
 
     @Scheduled(cron = "${qr-entry-control.cron.delete-expired-qr-job}", zone = "${qr-entry-control.cron.time-zone}")
     @Transactional

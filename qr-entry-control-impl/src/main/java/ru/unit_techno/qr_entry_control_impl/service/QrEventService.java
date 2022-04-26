@@ -28,6 +28,7 @@ public class QrEventService {
                 true,
                 new Description()
                         .setErroredServiceName("qr-entry-control")
+                        //set message from input args method
                         .setMessage("We are no have this QR code in database with uuid: " + inputQrFromFirmware.getUUID() +
                                 ". Try generate QR code on our website!"));
     }

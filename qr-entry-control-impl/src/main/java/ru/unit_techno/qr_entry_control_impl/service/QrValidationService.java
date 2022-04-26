@@ -43,6 +43,7 @@ public class QrValidationService {
             qrCodeEnt = repository.findByUuid(UUID.fromString(inputQrFromFirmware.getUUID()))
                     .orElseThrow(() -> new QrNotFoundException("qr not found in database"));
                 if (qrCodeEnt.getExpire()) {
+
                     throw new QrExpireException("QR code has expired! Try generate new QR code and use it! Expire date: "
                             + qrCodeEnt.getExpire().toString());
                 }
