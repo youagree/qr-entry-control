@@ -50,7 +50,8 @@ public class QrValidationService {
 
                 DateValidator.checkQrEnteringDate(qrCodeEnt);
 
-                DeviceResponseDto cardColumn = deviceResource.getGroupDevices(deviceId, DeviceType.CARD);
+                //todo сделать метод
+                DeviceResponseDto cardColumn = deviceResource.getGroupDevices(deviceId, DeviceType.QR);
 
                 qrCodeEnt.addCard(
                         new CardEntity()
