@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.unit.techno.ariss.barrier.api.dto.BarrierRequestDto;
 import ru.unit.techno.device.registration.api.DeviceResource;
 import ru.unit.techno.device.registration.api.dto.DeviceResponseDto;
+import ru.unit.techno.device.registration.api.dto.DeviceSourceTargetDto;
 import ru.unit.techno.device.registration.api.enums.DeviceType;
 import ru.unit_techno.qr_entry_control_impl.dto.InputQrFromFirmware;
 import ru.unit_techno.qr_entry_control_impl.entity.CardEntity;
@@ -51,7 +52,7 @@ public class QrValidationService {
                 DateValidator.checkQrEnteringDate(qrCodeEnt);
 
                 //todo сделать метод
-                DeviceResponseDto cardColumn = deviceResource.getGroupDevices(deviceId, DeviceType.QR);
+            DeviceSourceTargetDto cardColumn = deviceResource.getTargetDevice(deviceId, DeviceType.QR, DeviceType.CARD);
 
                 qrCodeEnt.addCard(
                         new CardEntity()
