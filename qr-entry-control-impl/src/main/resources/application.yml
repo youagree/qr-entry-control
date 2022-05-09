@@ -25,9 +25,9 @@ spring:
         format_sql: true
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/unit_techno?currentSchema=qr_entry_control
-    username: qr_entry_admin
-    password: squd
+    url: ${DATASOURCE_MAIN_DSN:jdbc:postgresql://localhost:5432/unit_techno?currentSchema=qr_entry_control}
+    username: ${DATASOURCE_MAIN_USERNAME:qr_entry_admin}
+    password: ${DATASOURCE_MAIN_PASSWORD:squd}
   thymeleaf:
     encoding: UTF-8
   mail:
